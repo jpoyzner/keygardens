@@ -42,7 +42,7 @@ This plan implements the requirements in [README.md](README.md), based on the te
 - [x] Init Next.js (TypeScript) app in this repository, ESLint/Prettier, Tailwind CSS
 - [x] Connect this repo to Vercel (auto-deploy on push to `main`)
 - [x] Create Supabase project (Postgres + Auth + Storage), wire up env vars locally and in Vercel
-- [ ] Create Stripe account, enable test mode, **start Stripe Connect onboarding for your payout account** (this can run in parallel while dev continues) — **requires you**: sign up for Stripe and begin Connect onboarding
+- [x] Create Stripe account, enable test mode, **start Stripe Connect onboarding for your payout account** (this can run in parallel while dev continues)
 - [ ] Create Resend account + verify sending domain — **requires you**: sign up for Resend and verify the sending domain
 
 ## Phase 2 — Data Model & Schema
