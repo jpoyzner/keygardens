@@ -61,9 +61,9 @@ This plan implements the requirements in [README.md](README.md), based on the te
 
 
 ## Phase 3 — Auth & Accounts
-- [ ] Sign-up / sign-in pages (Supabase Auth, email/password + password reset flow)
-- [ ] Session handling via Next.js middleware, protected routes for account/admin pages
-- [ ] Mark your account as `is_admin` for access to admin pages
+- [x] Sign-up / sign-in pages (Supabase Auth, email/password + password reset flow) — [src/app/login](src/app/login), [src/app/signup](src/app/signup), [src/app/forgot-password](src/app/forgot-password), [src/app/reset-password](src/app/reset-password), [src/app/auth/confirm/route.ts](src/app/auth/confirm/route.ts)
+- [x] Session handling via Next.js proxy (middleware.js was renamed to proxy.js in Next.js 16), protected routes for account/admin pages — [src/proxy.ts](src/proxy.ts), [src/lib/supabase/middleware.ts](src/lib/supabase/middleware.ts), [src/app/account/layout.tsx](src/app/account/layout.tsx), [src/app/admin/layout.tsx](src/app/admin/layout.tsx)
+- [ ] Mark your account as `is_admin` for access to admin pages — **requires you**: sign up at `/signup`, then run `npm run make-admin -- your@email.com`
 
 ## Phase 4 — Core Storefront Browsing
 - [ ] Home page

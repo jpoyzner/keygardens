@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3001",
     "lint": "eslint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "db:seed": "node --env-file=.env.local scripts/seed.mts"
+    "db:seed": "node --env-file=.env.local scripts/seed.mts",
+    "make-admin": "node --env-file=.env.local scripts/set-admin.mts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",
