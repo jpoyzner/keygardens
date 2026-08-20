@@ -55,9 +55,10 @@ This plan implements the requirements in [README.md](README.md), based on the te
 - **TODO once the real second (90%-recipient) business account is created**: swap roles — the new account becomes the platform account (its keys replace the current ones in `.env.local`/Vercel), and the current account gets properly onboarded as the real (non-test) connected account to receive the live 10% payouts.
 
 ## Phase 2 — Data Model & Schema
-- [ ] Design tables: `categories`, `products`, `product_images`, `orders` (including a `status` field for pending/shipped/delivered), `order_items`, `profiles` (extends Supabase auth users, includes `is_admin` flag), `subscribers`, `coming_soon_items`, `wishlist_items`, `product_reviews`
-- [ ] Add Postgres Row Level Security policies (public read on products/categories/reviews, owner-only read/write on orders/profiles/wishlist, admin-only write on products/coming-soon/order status)
-- [ ] Seed database from the Phase 0 content inventory (products, categories, images uploaded to Supabase Storage)
+- [x] Design tables: `categories`, `products`, `product_images`, `orders` (including a `status` field for pending/shipped/delivered), `order_items`, `profiles` (extends Supabase auth users, includes `is_admin` flag), `subscribers`, `coming_soon_items`, `wishlist_items`, `product_reviews` — see [supabase/migrations](supabase/migrations)
+- [x] Add Postgres Row Level Security policies (public read on products/categories/reviews, owner-only read/write on orders/profiles/wishlist, admin-only write on products/coming-soon/order status) — see [supabase/migrations/20260820120500_rls_policies.sql](supabase/migrations/20260820120500_rls_policies.sql)
+- [x] Seed database from the Phase 0 content inventory (products, categories, images uploaded to Supabase Storage) — `npm run db:seed` ([scripts/seed.mts](scripts/seed.mts)) run successfully against the Supabase project: 4 categories, 4 products with images, 4 coming-soon slides
+
 
 ## Phase 3 — Auth & Accounts
 - [ ] Sign-up / sign-in pages (Supabase Auth, email/password + password reset flow)
