@@ -33,10 +33,10 @@ This plan implements the requirements in [README.md](README.md), based on the te
 ---
 
 ## Phase 0 — Discovery & Content Inventory
-- [ ] Crawl keygardens.ca and record: full category/sub-category tree, product list (name, description, price, category, image URLs)
-- [ ] Download product + site images at best available resolution
-- [ ] Note any content that looks incomplete/low-res and flag for you to supply manually
-- [ ] Produce a structured inventory file (JSON/CSV) used to seed the database in Phase 2
+- [x] Crawl keygardens.ca and record: full category/sub-category tree, product list (name, description, price, category, image URLs) — see [content-inventory/inventory.json](content-inventory/inventory.json)
+- [x] Download product + site images at best available resolution — see `content-inventory/images/`
+- [x] Note any content that looks incomplete/low-res and flag for you to supply manually — see [content-inventory/NOTES.md](content-inventory/NOTES.md)
+- [x] Produce a structured inventory file (JSON/CSV) used to seed the database in Phase 2 — [content-inventory/inventory.json](content-inventory/inventory.json)
 
 ## Phase 1 — Project Foundation & Infra
 - [ ] Init Next.js (TypeScript) app in this repository, ESLint/Prettier, Tailwind CSS

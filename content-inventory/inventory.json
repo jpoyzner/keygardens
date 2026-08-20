@@ -1,0 +1,132 @@
+{
+  "source": "https://keygardens.ca",
+  "crawledAt": "2026-08-20",
+  "categories": [
+    {
+      "slug": "hoodie",
+      "name": "hoodie",
+      "sourceUrl": "https://keygardens.ca/ols/categories/hoodie"
+    },
+    {
+      "slug": "sport-hat",
+      "name": "sport hat",
+      "sourceUrl": "https://keygardens.ca/ols/categories/sport-hat"
+    },
+    {
+      "slug": "hats",
+      "name": "hats",
+      "sourceUrl": "https://keygardens.ca/ols/products/hats",
+      "note": "Live site groups this product under the 'sport hat' category page; rebuild uses a dedicated 'hats' category instead."
+    },
+    {
+      "slug": "t-shirt",
+      "name": "t-shirt",
+      "sourceUrl": "https://keygardens.ca/ols/categories/t-shurt",
+      "note": "Live site spells this category 't-shurt' (typo); corrected to 't-shirt' for the rebuild."
+    }
+  ],
+  "products": [
+    {
+      "slug": "sport-hat",
+      "name": "sport hat",
+      "categorySlug": "sport-hat",
+      "description": null,
+      "currency": "USD",
+      "price": 35.00,
+      "salePrice": 15.00,
+      "freeShipping": false,
+      "sourceUrl": "https://keygardens.ca/ols/products/sport-hat",
+      "images": [
+        {
+          "file": "images/products/sport-hat.png",
+          "sourceUrl": "https://img1.wsimg.com/isteam/ip/687b005e-64e9-407f-85bf-de5a268d0b86/blob-49f8ef8.png",
+          "width": 2160,
+          "height": 1440
+        }
+      ]
+    },
+    {
+      "slug": "hoodies",
+      "name": "Hoodies",
+      "categorySlug": "hoodie",
+      "description": null,
+      "currency": "USD",
+      "price": 35.00,
+      "salePrice": null,
+      "freeShipping": false,
+      "sourceUrl": "https://keygardens.ca/ols/products/hoodies",
+      "images": [
+        {
+          "file": "images/products/hoodies.jpg",
+          "sourceUrl": "https://img1.wsimg.com/isteam/ip/687b005e-64e9-407f-85bf-de5a268d0b86/ols/IMG_0079.PNG",
+          "width": 1177,
+          "height": 2560,
+          "note": "Source asset EXIF marks this as a screenshot, not original product photography."
+        }
+      ]
+    },
+    {
+      "slug": "hats",
+      "name": "Hats",
+      "categorySlug": "hats",
+      "description": null,
+      "currency": "USD",
+      "price": 20.00,
+      "salePrice": null,
+      "freeShipping": false,
+      "sourceUrl": "https://keygardens.ca/ols/products/hats",
+      "images": [
+        {
+          "file": "images/products/hats.jpg",
+          "sourceUrl": "https://img1.wsimg.com/isteam/ip/687b005e-64e9-407f-85bf-de5a268d0b86/ols/IMG_0078.PNG",
+          "width": 1177,
+          "height": 2560,
+          "note": "Source asset EXIF marks this as a screenshot, not original product photography."
+        }
+      ]
+    },
+    {
+      "slug": "key-garden",
+      "name": "key garden",
+      "categorySlug": "t-shirt",
+      "description": null,
+      "currency": "USD",
+      "price": 20.00,
+      "salePrice": null,
+      "freeShipping": true,
+      "sourceUrl": "https://keygardens.ca/ols/products/key-garden",
+      "images": [
+        {
+          "file": "images/products/key-garden.jpg",
+          "sourceUrl": "https://img1.wsimg.com/isteam/ip/687b005e-64e9-407f-85bf-de5a268d0b86/blob-4e80917.png",
+          "width": 1722,
+          "height": 1218,
+          "note": "Byte-identical to coming-soon slide 1 (images/coming-soon/slide-1-grayscale.jpg) - same source asset reused by the CMS."
+        }
+      ]
+    }
+  ],
+  "comingSoonSlides": [
+    {
+      "order": 1,
+      "file": "images/coming-soon/slide-1-grayscale.jpg",
+      "sourceUrl": "https://img1.wsimg.com/isteam/ip/687b005e-64e9-407f-85bf-de5a268d0b86/blob-d2f1c02.png",
+      "note": "Displayed with a grayscale filter on the live site; same underlying asset as the key-garden product image."
+    },
+    {
+      "order": 2,
+      "file": "images/coming-soon/slide-2.jpg",
+      "sourceUrl": "https://img1.wsimg.com/isteam/ip/687b005e-64e9-407f-85bf-de5a268d0b86/blob-6a61c30.png"
+    },
+    {
+      "order": 3,
+      "file": "images/coming-soon/slide-3.jpeg",
+      "sourceUrl": "https://img1.wsimg.com/isteam/ip/687b005e-64e9-407f-85bf-de5a268d0b86/IMG_5448.jpeg"
+    },
+    {
+      "order": 4,
+      "file": "images/coming-soon/slide-4.jpeg",
+      "sourceUrl": "https://img1.wsimg.com/isteam/ip/687b005e-64e9-407f-85bf-de5a268d0b86/IMG_9599.jpeg"
+    }
+  ]
+}
