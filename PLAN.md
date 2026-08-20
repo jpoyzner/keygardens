@@ -45,6 +45,14 @@ This plan implements the requirements in [README.md](README.md), based on the te
 - [x] Create Stripe account, enable test mode, **start Stripe Connect onboarding for your payout account** (this can run in parallel while dev continues)
 - [ ] Create Resend account + verify sending domain — **requires you**: sign up for Resend and verify the sending domain
 
+### Stripe Connect — current setup state (temporary, until the second account exists)
+
+- Only one Stripe account exists so far. It's temporarily acting as the **platform account**: its test-mode keys (`STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`) are in `.env.local`/Vercel, and it's what creates Checkout sessions and receives the 90% by default (no extra config needed for that part).
+- Connect is enabled on that account, using the **"You collect payments and pay recipients"** integration type (destination charges — customer sees one charge, split happens server-side).
+- A **test-mode connected account** was created under it to receive the 10% split; its ID is `STRIPE_CONNECTED_ACCOUNT_ID` in `.env.local`/Vercel.
+- A webhook endpoint is configured on the platform account (scope: "Your account", not "Connected accounts"), listening for `checkout.session.completed` (+ optionally `checkout.session.async_payment_failed`, `checkout.session.expired`), pointed at the Vercel git-main branch URL + `/api/webhooks/stripe`. That route doesn't exist yet (Phase 7) — deliveries will fail/404 until then, which is expected.
+- **TODO once the real second (90%-recipient) business account is created**: swap roles — the new account becomes the platform account (its keys replace the current ones in `.env.local`/Vercel), and the current account gets properly onboarded as the real (non-test) connected account to receive the live 10% payouts.
+
 ## Phase 2 — Data Model & Schema
 - [ ] Design tables: `categories`, `products`, `product_images`, `orders` (including a `status` field for pending/shipped/delivered), `order_items`, `profiles` (extends Supabase auth users, includes `is_admin` flag), `subscribers`, `coming_soon_items`, `wishlist_items`, `product_reviews`
 - [ ] Add Postgres Row Level Security policies (public read on products/categories/reviews, owner-only read/write on orders/profiles/wishlist, admin-only write on products/coming-soon/order status)
