@@ -1,0 +1,12 @@
+.next
+out
+build
+node_modules
+coverage
+public
+package-lock.json
+
+# Pre-existing project docs/content — not managed by Prettier
+PLAN.md
+README.md
+content-inventory/

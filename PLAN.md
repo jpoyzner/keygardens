@@ -39,11 +39,11 @@ This plan implements the requirements in [README.md](README.md), based on the te
 - [x] Produce a structured inventory file (JSON/CSV) used to seed the database in Phase 2 — [content-inventory/inventory.json](content-inventory/inventory.json)
 
 ## Phase 1 — Project Foundation & Infra
-- [ ] Init Next.js (TypeScript) app in this repository, ESLint/Prettier, Tailwind CSS
-- [ ] Connect this repo to Vercel (auto-deploy on push to `main`)
-- [ ] Create Supabase project (Postgres + Auth + Storage), wire up env vars locally and in Vercel
-- [ ] Create Stripe account, enable test mode, **start Stripe Connect onboarding for your payout account** (this can run in parallel while dev continues)
-- [ ] Create Resend account + verify sending domain
+- [x] Init Next.js (TypeScript) app in this repository, ESLint/Prettier, Tailwind CSS
+- [x] Connect this repo to Vercel (auto-deploy on push to `main`)
+- [ ] Create Supabase project (Postgres + Auth + Storage), wire up env vars locally and in Vercel — **requires you**: create the Supabase project; env var names are scaffolded in [.env.example](.env.example)
+- [ ] Create Stripe account, enable test mode, **start Stripe Connect onboarding for your payout account** (this can run in parallel while dev continues) — **requires you**: sign up for Stripe and begin Connect onboarding
+- [ ] Create Resend account + verify sending domain — **requires you**: sign up for Resend and verify the sending domain
 
 ## Phase 2 — Data Model & Schema
 - [ ] Design tables: `categories`, `products`, `product_images`, `orders` (including a `status` field for pending/shipped/delivered), `order_items`, `profiles` (extends Supabase auth users, includes `is_admin` flag), `subscribers`, `coming_soon_items`, `wishlist_items`, `product_reviews`
