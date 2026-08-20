@@ -44,6 +44,7 @@ This plan implements the requirements in [README.md](README.md), based on the te
 - [x] Create Supabase project (Postgres + Auth + Storage), wire up env vars locally and in Vercel
 - [x] Create Stripe account, enable test mode, **start Stripe Connect onboarding for your payout account** (this can run in parallel while dev continues)
 - [ ] Create Resend account + verify sending domain — **requires you**: sign up for Resend and verify the sending domain
+  - Blocked: Resend's "auto configure" needs sign-in to the DNS provider for `keygardens.ca`, which we don't have (client owns the domain). Using manual setup instead: Resend gives us the DNS records to hand to the client to add at their registrar. Until verified, use Resend's shared sandbox sender (`onboarding@resend.dev`) for local dev/testing.
 
 ### Stripe Connect — current setup state (temporary, until the second account exists)
 
