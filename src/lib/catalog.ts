@@ -217,3 +217,29 @@ export async function getRelatedProducts(
   const products = await getProducts({ categorySlug });
   return products.filter((product) => product.id !== excludeProductId).slice(0, limit);
 }
+
+export async function searchProducts(query: string): Promise<ProductSummary[]> {
+  const needle = query.trim().toLowerCase();
+  if (!needle) return [];
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("products")
+    .select(
+      "id, slug, name, description, price, sale_price, currency, free_shipping, created_at, categories(slug, name), product_images(storage_path, alt_text, sort_order), product_reviews(count)",
+    )
+    .eq("is_active", true)
+    .order("created_at", { ascending: false });
+  if (error) throw new Error(`Failed to search products: ${error.message}`);
+
+  // v1 search: filter the cached active-product list in JS (name/category/description),
+  // rather than a dedicated search service — revisit if the catalog grows significantly.
+  const rows = (data ?? []) as unknown as (ProductRow & { description: string | null })[];
+  const matches = rows.filter((row) =>
+    [row.name, row.categories?.name, row.description].some((field) =>
+      field?.toLowerCase().includes(needle),
+    ),
+  );
+
+  return matches.map((row) => toProductSummary(supabase, row));
+}

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/lib/auth/actions";
 import { CartIndicator } from "@/components/cart-indicator";
+import { SearchBar } from "@/components/search-bar";
 
 export async function SiteHeader() {
   const supabase = await createClient();
@@ -28,6 +29,7 @@ export async function SiteHeader() {
         <Link href="/products" className="underline">
           Products
         </Link>
+        <SearchBar />
         <CartIndicator />
         {user ? (
           <>

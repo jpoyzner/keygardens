@@ -80,8 +80,8 @@ This plan implements the requirements in [README.md](README.md), based on the te
 - [x] "You may also like" related products section (same category, excluding the current product) — `getRelatedProducts()` in [src/lib/catalog.ts](src/lib/catalog.ts)
 
 ## Phase 6 — Search
-- [ ] Search bar in header, results page with URL-synced query param
-- [ ] v1: filter across cached product list (name/category/description) — revisit a dedicated search service later if catalog grows significantly
+- [x] Search bar in header, results page with URL-synced query param — [src/components/search-bar.tsx](src/components/search-bar.tsx) (GET form, header in [src/components/site-header.tsx](src/components/site-header.tsx)), [src/app/search/page.tsx](src/app/search/page.tsx) (`?q=`)
+- [x] v1: filter across cached product list (name/category/description) — `searchProducts()` in [src/lib/catalog.ts](src/lib/catalog.ts); revisit a dedicated search service later if catalog grows significantly
 
 ## Phase 7 — Cart & Checkout
 - [ ] Cart state (persisted per session/user), add/remove/update quantity
