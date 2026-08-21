@@ -1,24 +1,38 @@
 "use client";
 
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 export function SearchBar() {
   const searchParams = useSearchParams();
-  const defaultValue = searchParams.get("q") ?? "";
+  const [value, setValue] = useState(searchParams.get("q") ?? "");
 
   return (
     <form action="/search" method="GET" className="flex items-center">
       <label htmlFor="search-q" className="sr-only">
         Search products
       </label>
-      <input
-        id="search-q"
-        name="q"
-        type="search"
-        defaultValue={defaultValue}
-        placeholder="Search products…"
-        className="w-32 rounded border border-zinc-300 px-2 py-1.5 text-sm focus:w-48 focus:outline-none focus:ring-2 focus:ring-white sm:w-40"
-      />
+      <div className="relative flex items-center">
+        <input
+          id="search-q"
+          name="q"
+          type="search"
+          value={value}
+          onChange={(event) => setValue(event.target.value)}
+          placeholder="Search products…"
+          className="w-32 rounded border border-zinc-300 px-2 py-1.5 pr-6 text-sm focus:w-48 sm:w-40"
+        />
+        {value && (
+          <button
+            type="button"
+            onClick={() => setValue("")}
+            aria-label="Clear search"
+            className="absolute right-1.5 text-white"
+          >
+            ×
+          </button>
+        )}
+      </div>
     </form>
   );
 }

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/lib/auth/actions";
 import { CartIndicator } from "@/components/cart-indicator";
@@ -21,9 +22,15 @@ export async function SiteHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-50 flex items-center justify-between border-b border-white bg-black px-6 py-4 text-white">
-      <Link href="/" className="font-semibold">
-        Keygardens
+    <header className="sticky top-0 z-50 flex items-center justify-between border-b border-white bg-[#1d1d1b] px-6 py-2 text-white">
+      <Link href="/" className="flex items-center">
+        <Image
+          src="/logo.png"
+          alt="Keygardens"
+          width={1034}
+          height={312}
+          className="h-12 w-auto object-contain"
+        />
       </Link>
       <nav className="flex items-center gap-4 text-sm">
         <Link href="/products" className="underline">
