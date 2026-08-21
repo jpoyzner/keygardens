@@ -45,6 +45,7 @@ This plan implements the requirements in [README.md](README.md), based on the te
 - [x] Create Stripe account, enable test mode, **start Stripe Connect onboarding for your payout account** (this can run in parallel while dev continues)
 - [ ] Create Resend account + verify sending domain — **requires you**: sign up for Resend and verify the sending domain
   - Blocked: Resend's "auto configure" needs sign-in to the DNS provider for `keygardens.ca`, which we don't have (client owns the domain). Using manual setup instead: Resend gives us the DNS records to hand to the client to add at their registrar. Until verified, use Resend's shared sandbox sender (`onboarding@resend.dev`) for local dev/testing.
+  - Supabase Auth's custom SMTP (Project Settings > Authentication > SMTP Settings) is configured to relay through Resend (`smtp.resend.com`, sender `onboarding@resend.dev`) so auth emails (confirmation, password reset) actually deliver — Supabase's built-in mailer only sends to project team members otherwise. **Since this is the same Supabase project used by both local dev and production, this SMTP config is shared** — once the real sending domain is verified in Resend, remember to update the sender email in Supabase's SMTP settings (not just `RESEND_FROM_EMAIL` in `.env.local`/Vercel) to the branded address.
 
 ### Stripe Connect — current setup state (temporary, until the second account exists)
 
@@ -63,7 +64,7 @@ This plan implements the requirements in [README.md](README.md), based on the te
 ## Phase 3 — Auth & Accounts
 - [x] Sign-up / sign-in pages (Supabase Auth, email/password + password reset flow) — [src/app/login](src/app/login), [src/app/signup](src/app/signup), [src/app/forgot-password](src/app/forgot-password), [src/app/reset-password](src/app/reset-password), [src/app/auth/confirm/route.ts](src/app/auth/confirm/route.ts)
 - [x] Session handling via Next.js proxy (middleware.js was renamed to proxy.js in Next.js 16), protected routes for account/admin pages — [src/proxy.ts](src/proxy.ts), [src/lib/supabase/middleware.ts](src/lib/supabase/middleware.ts), [src/app/account/layout.tsx](src/app/account/layout.tsx), [src/app/admin/layout.tsx](src/app/admin/layout.tsx)
-- [ ] Mark your account as `is_admin` for access to admin pages — **requires you**: sign up at `/signup`, then run `npm run make-admin -- your@email.com`
+- [x] Mark your account as `is_admin` for access to admin pages — **requires you**: sign up at `/signup`, then run `npm run make-admin -- your@email.com`. Done: `JeffPoyzner@yahoo.com` granted admin and confirmed access to `/admin`.
 
 ## Phase 4 — Core Storefront Browsing
 - [ ] Home page

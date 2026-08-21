@@ -48,6 +48,8 @@ The rebuilt pages will include the following features:
 5. Start the dev server: `npm run dev` — the app runs at http://localhost:3001 (port 3000 is reserved for another local project on this machine).
 6. Sign up for an account at `/signup`, then grant it admin access: `npm run make-admin -- your@email.com`.
 
+**Note:** there is currently only one Supabase project, and both local dev (`.env.local`) and the Vercel production deploy point at it — there is no separate staging/local database yet. Signups, seeding, and admin grants done locally affect the real production data. `npm run db:seed` and `npm run make-admin` already act on production as a result; no separate credentials are needed for them (see [PLAN.md](PLAN.md) "Environments" decision — no separate staging environment).
+
 Other useful scripts: `npm run lint`, `npm run format` (Prettier), `npm run build` / `npm run start` (production build, also on port 3001).
 
 ## Deploying to Production (Vercel)
@@ -56,5 +58,5 @@ This repo is connected to Vercel with auto-deploy on push to `main` — pushing/
 
 1. Push your changes to `main` (directly, or merge a PR into it): `git push origin main`.
 2. Vercel picks up the push, runs `npm run build`, and deploys automatically — check the deployment status/logs on the Vercel dashboard for this project.
-3. Make sure every variable in `.env.example` is also set as an Environment Variable on the Vercel project (Settings > Environment Variables), using **live** Stripe/Resend keys for production and the production Supabase project's keys. `NEXT_PUBLIC_SITE_URL` should be the production URL (e.g. `https://keygardens.ca` once the domain is live).
-4. Any new/changed SQL files in `supabase/migrations` must be applied to the production Supabase project's SQL Editor as well — Vercel does not run them automatically.
+3. Make sure every variable in `.env.example` is also set as an Environment Variable on the Vercel project (Settings > Environment Variables), using **live** Stripe/Resend keys for production. Supabase currently uses the same single project as local dev, so those values are already the production ones. `NEXT_PUBLIC_SITE_URL` should be the production URL (e.g. `https://keygardens.ca` once the domain is live).
+4. Any new/changed SQL files in `supabase/migrations` only need to be applied once (there's one shared Supabase project) — but if a separate production Supabase project is created later, migrations will need to be applied to both.

@@ -10,10 +10,20 @@ export async function GET(request: NextRequest) {
   const type = searchParams.get("type") as EmailOtpType | null;
   const next = searchParams.get("next") ?? "/";
 
+  const supabase = await createClient();
+
   if (tokenHash && type) {
-    const supabase = await createClient();
     const { error } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
     if (!error) {
+      return NextResponse.redirect(`${origin}${next}`);
+    }
+  } else {
+    // Falls through here if the email template links to Supabase's own hosted
+    // verify endpoint instead of straight to this route with token_hash/type —
+    // that endpoint verifies the token before redirecting, so don't show a
+    // false "invalid link" error if the user already ended up signed in.
+    const { data } = await supabase.auth.getUser();
+    if (data.user) {
       return NextResponse.redirect(`${origin}${next}`);
     }
   }

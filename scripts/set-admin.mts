@@ -25,10 +25,11 @@ const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
 });
 
 async function main() {
+  // Supabase Auth normalizes emails to lowercase, so match case-insensitively.
   const { data, error } = await supabase
     .from("profiles")
     .update({ is_admin: true })
-    .eq("email", email)
+    .eq("email", email.toLowerCase())
     .select("id, email")
     .single();
 
