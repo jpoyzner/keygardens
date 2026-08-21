@@ -29,6 +29,12 @@ export async function SiteHeader() {
         <Link href="/products" className="underline">
           Products
         </Link>
+        <Link href="/coming-soon" className="underline">
+          Coming soon
+        </Link>
+        <Link href="/contact" className="underline">
+          Contact
+        </Link>
         <SearchBar />
         <CartIndicator />
         {user ? (

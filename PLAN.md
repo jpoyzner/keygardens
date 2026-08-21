@@ -93,19 +93,19 @@ This plan implements the requirements in [README.md](README.md), based on the te
 - [x] Wishlist/favorites: signed-in users can save products to a personal wishlist and view/remove them from their profile — [src/components/wishlist-button.tsx](src/components/wishlist-button.tsx) (product detail page) + [src/app/account/wishlist/page.tsx](src/app/account/wishlist/page.tsx), mutations in [src/lib/wishlist/actions.ts](src/lib/wishlist/actions.ts), reads (`getWishlistProducts`/`isProductWishlisted`) added to [src/lib/catalog.ts](src/lib/catalog.ts)
 
 ## Phase 9 — Contact/Feedback & Email Subscription
-- [ ] Contact/feedback form → sends via Resend to your inbox, stores submission in DB
-- [ ] Email subscription sign-up form → stores in `subscribers` table, sends confirmation via Resend
-- [ ] Order status emails: automatic email via Resend when an order's status changes to shipped or delivered (beyond the initial purchase receipt)
+- [x] Contact/feedback form → sends via Resend to your inbox, stores submission in DB — [src/app/contact/page.tsx](src/app/contact/page.tsx), [src/components/contact-form.tsx](src/components/contact-form.tsx), [src/lib/contact/actions.ts](src/lib/contact/actions.ts), stored in [supabase/migrations/20260822000000_contact_submissions.sql](supabase/migrations/20260822000000_contact_submissions.sql) — **requires you**: apply the new migration, and set `CONTACT_INBOX_EMAIL` in `.env.local`/Vercel to the inbox that should receive submissions
+- [x] Email subscription sign-up form → stores in `subscribers` table, sends confirmation via Resend — [src/components/subscribe-form.tsx](src/components/subscribe-form.tsx), [src/lib/subscribers/actions.ts](src/lib/subscribers/actions.ts), shown on [src/app/coming-soon/page.tsx](src/app/coming-soon/page.tsx)
+- [x] Order status emails: automatic email via Resend when an order's status changes to shipped or delivered (beyond the initial purchase receipt) — triggered from [src/lib/admin/orders-actions.ts](src/lib/admin/orders-actions.ts) via `sendOrderStatusEmail` in [src/lib/email.ts](src/lib/email.ts)
 
 ## Phase 10 — Admin: Product Management
-- [ ] Admin-only dashboard (gated by `is_admin`)
-- [ ] Create/edit/remove products and categories, manage images (upload to Supabase Storage)
-- [ ] Update order status (pending/shipped/delivered), triggering the status emails from Phase 9
-- [ ] Moderate/remove product reviews if needed
+- [x] Admin-only dashboard (gated by `is_admin`) — [src/app/admin/page.tsx](src/app/admin/page.tsx), nav in [src/app/admin/layout.tsx](src/app/admin/layout.tsx)
+- [x] Create/edit/remove products and categories, manage images (upload to Supabase Storage) — [src/app/admin/products](src/app/admin/products), [src/app/admin/categories/page.tsx](src/app/admin/categories/page.tsx), [src/lib/admin/products.ts](src/lib/admin/products.ts), [src/lib/admin/products-actions.ts](src/lib/admin/products-actions.ts), [src/lib/admin/categories-actions.ts](src/lib/admin/categories-actions.ts)
+- [x] Update order status (pending/shipped/delivered), triggering the status emails from Phase 9 — [src/app/admin/orders](src/app/admin/orders), [src/lib/admin/orders-actions.ts](src/lib/admin/orders-actions.ts)
+- [x] Moderate/remove product reviews if needed — [src/app/admin/reviews/page.tsx](src/app/admin/reviews/page.tsx), [src/lib/admin/reviews.ts](src/lib/admin/reviews.ts), [src/lib/admin/reviews-actions.ts](src/lib/admin/reviews-actions.ts)
 
 ## Phase 11 — "Coming Soon" Page
-- [ ] Standalone `/coming-soon` page with slideshow
-- [ ] Admin screen to add/edit/reorder/remove slides
+- [x] Standalone `/coming-soon` page with slideshow — [src/app/coming-soon/page.tsx](src/app/coming-soon/page.tsx), [src/components/coming-soon-slideshow.tsx](src/components/coming-soon-slideshow.tsx), reads in [src/lib/coming-soon.ts](src/lib/coming-soon.ts)
+- [x] Admin screen to add/edit/reorder/remove slides — [src/app/admin/coming-soon/page.tsx](src/app/admin/coming-soon/page.tsx), [src/lib/admin/coming-soon.ts](src/lib/admin/coming-soon.ts), [src/lib/admin/coming-soon-actions.ts](src/lib/admin/coming-soon-actions.ts)
 
 ## Phase 12 — Checkout & Payments (Stripe)
 - [ ] Stripe Checkout session creation (server-side API route)

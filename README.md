@@ -42,7 +42,7 @@ The rebuilt pages will include the following features:
 ## Running Locally
 
 1. Install dependencies: `npm install` (requires Node 24+).
-2. Copy `.env.example` to `.env.local` and fill in real values (Supabase project URL/keys, Stripe test keys, Resend key). `NEXT_PUBLIC_SITE_URL` should stay `http://localhost:3001` for local dev.
+2. Copy `.env.example` to `.env.local` and fill in real values (Supabase project URL/keys, Stripe test keys, Resend key, `CONTACT_INBOX_EMAIL` for contact-form notifications). `NEXT_PUBLIC_SITE_URL` should stay `http://localhost:3001` for local dev.
 3. Apply the SQL files in [supabase/migrations](supabase/migrations) to your Supabase project, in filename order, via the Supabase Dashboard SQL Editor (no Supabase CLI is linked yet).
 4. Seed the database from the content inventory: `npm run db:seed`.
 5. Start the dev server: `npm run dev` — the app runs at http://localhost:3001 (port 3000 is reserved for another local project on this machine).

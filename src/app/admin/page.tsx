@@ -1,10 +1,45 @@
+import Link from "next/link";
+
+const SECTIONS = [
+  {
+    href: "/admin/products",
+    label: "Products",
+    description: "Create, edit, and remove products, categories, and images.",
+  },
+  {
+    href: "/admin/categories",
+    label: "Categories",
+    description: "Manage the category list used for browsing and filters.",
+  },
+  {
+    href: "/admin/orders",
+    label: "Orders",
+    description: "View orders and update fulfillment status.",
+  },
+  { href: "/admin/reviews", label: "Reviews", description: "Moderate or remove product reviews." },
+  {
+    href: "/admin/coming-soon",
+    label: "Coming soon",
+    description: "Manage the coming-soon slideshow.",
+  },
+];
+
 export default function AdminPage() {
   return (
-    <div className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-6 px-4 py-16">
+    <div className="flex flex-col gap-6">
       <h1 className="text-2xl font-semibold">Admin</h1>
-      <p className="text-zinc-600">
-        Product, category, order, and coming-soon management land here in later phases.
-      </p>
+      <div className="grid gap-4 sm:grid-cols-2">
+        {SECTIONS.map((section) => (
+          <Link
+            key={section.href}
+            href={section.href}
+            className="flex flex-col gap-1 rounded border border-zinc-200 px-4 py-3 hover:border-zinc-400"
+          >
+            <span className="font-medium">{section.label}</span>
+            <span className="text-sm text-zinc-600">{section.description}</span>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }
