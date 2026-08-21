@@ -8,15 +8,10 @@
       "sourceUrl": "https://keygardens.ca/ols/categories/hoodie"
     },
     {
-      "slug": "sport-hat",
-      "name": "sport hat",
-      "sourceUrl": "https://keygardens.ca/ols/categories/sport-hat"
-    },
-    {
       "slug": "hats",
       "name": "hats",
       "sourceUrl": "https://keygardens.ca/ols/products/hats",
-      "note": "Live site groups this product under the 'sport hat' category page; rebuild uses a dedicated 'hats' category instead."
+      "note": "Live site groups this product under the 'sport hat' category page; rebuild uses a dedicated 'hats' category instead. The separate 'sport hat' product/category was removed as a duplicate of this one."
     },
     {
       "slug": "t-shirt",
@@ -26,25 +21,6 @@
     }
   ],
   "products": [
-    {
-      "slug": "sport-hat",
-      "name": "sport hat",
-      "categorySlug": "sport-hat",
-      "description": null,
-      "currency": "USD",
-      "price": 35.00,
-      "salePrice": 15.00,
-      "freeShipping": false,
-      "sourceUrl": "https://keygardens.ca/ols/products/sport-hat",
-      "images": [
-        {
-          "file": "images/products/sport-hat.png",
-          "sourceUrl": "https://img1.wsimg.com/isteam/ip/687b005e-64e9-407f-85bf-de5a268d0b86/blob-49f8ef8.png",
-          "width": 2160,
-          "height": 1440
-        }
-      ]
-    },
     {
       "slug": "hoodies",
       "name": "Hoodies",
@@ -93,7 +69,7 @@
       "currency": "USD",
       "price": 20.00,
       "salePrice": null,
-      "freeShipping": true,
+      "freeShipping": false,
       "sourceUrl": "https://keygardens.ca/ols/products/key-garden",
       "images": [
         {

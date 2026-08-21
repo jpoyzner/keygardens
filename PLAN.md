@@ -58,7 +58,7 @@ This plan implements the requirements in [README.md](README.md), based on the te
 ## Phase 2 — Data Model & Schema
 - [x] Design tables: `categories`, `products`, `product_images`, `orders` (including a `status` field for pending/shipped/delivered), `order_items`, `profiles` (extends Supabase auth users, includes `is_admin` flag), `subscribers`, `coming_soon_items`, `wishlist_items`, `product_reviews` — see [supabase/migrations](supabase/migrations)
 - [x] Add Postgres Row Level Security policies (public read on products/categories/reviews, owner-only read/write on orders/profiles/wishlist, admin-only write on products/coming-soon/order status) — see [supabase/migrations/20260820120500_rls_policies.sql](supabase/migrations/20260820120500_rls_policies.sql)
-- [x] Seed database from the Phase 0 content inventory (products, categories, images uploaded to Supabase Storage) — `npm run db:seed` ([scripts/seed.mts](scripts/seed.mts)) run successfully against the Supabase project: 4 categories, 4 products with images, 4 coming-soon slides
+- [x] Seed database from the Phase 0 content inventory (products, categories, images uploaded to Supabase Storage) — `npm run db:seed` ([scripts/seed.mts](scripts/seed.mts)) run successfully against the Supabase project: 3 categories, 3 products with images, 4 coming-soon slides (the initially-seeded "sport hat" product/category was later removed as a duplicate of "hats")
 
 
 ## Phase 3 — Auth & Accounts
@@ -67,10 +67,10 @@ This plan implements the requirements in [README.md](README.md), based on the te
 - [x] Mark your account as `is_admin` for access to admin pages — **requires you**: sign up at `/signup`, then run `npm run make-admin -- your@email.com`. Done: `JeffPoyzner@yahoo.com` granted admin and confirmed access to `/admin`.
 
 ## Phase 4 — Core Storefront Browsing
-- [ ] Home page
-- [ ] All-products page and per-category/sub-category pages, with URL-synced filters (e.g. `/products?category=x&sort=price`)
-- [ ] Sorting: popularity, newness, price, alphabetical
-- [ ] Product preview cards (image, name, price, quick link)
+- [x] Home page — [src/app/page.tsx](src/app/page.tsx)
+- [x] All-products page and per-category/sub-category pages, with URL-synced filters (e.g. `/products?category=x&sort=price`) — [src/app/products/page.tsx](src/app/products/page.tsx), [src/components/product-filters.tsx](src/components/product-filters.tsx)
+- [x] Sorting: popularity, newness, price, alphabetical — see `SORT_OPTIONS` in [src/lib/catalog.ts](src/lib/catalog.ts) (popularity currently ranks by review count; revisit once order history exists in Phase 7)
+- [x] Product preview cards (image, name, price, quick link) — [src/components/product-card.tsx](src/components/product-card.tsx), linking to a minimal `/products/[slug]` detail page ([src/app/products/[slug]/page.tsx](src/app/products/%5Bslug%5D/page.tsx)) that Phase 5 will flesh out (zoom, cart, reviews, related products)
 
 ## Phase 5 — Product Detail Page
 - [ ] Product detail route with image zoom (e.g. hover/click-to-zoom gallery)
