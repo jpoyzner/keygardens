@@ -83,17 +83,14 @@ This plan implements the requirements in [README.md](README.md), based on the te
 - [x] Search bar in header, results page with URL-synced query param — [src/components/search-bar.tsx](src/components/search-bar.tsx) (GET form, header in [src/components/site-header.tsx](src/components/site-header.tsx)), [src/app/search/page.tsx](src/app/search/page.tsx) (`?q=`)
 - [x] v1: filter across cached product list (name/category/description) — `searchProducts()` in [src/lib/catalog.ts](src/lib/catalog.ts); revisit a dedicated search service later if catalog grows significantly
 
-## Phase 7 — Cart & Checkout
-- [ ] Cart state (persisted per session/user), add/remove/update quantity
-- [ ] Stripe Checkout session creation (server-side API route)
-- [ ] Stripe Connect destination charge: automatically routes 10% of profit to your connected account on every successful payment
-- [ ] Order + order_items written to DB on successful webhook confirmation
-- [ ] Test entirely in Stripe test mode before go-live
+## Phase 7 — Cart
+- [x] Cart state (persisted per session/user), add/remove/update quantity — cart state itself was already built in Phase 5 ([src/lib/cart/cart-context.tsx](src/lib/cart/cart-context.tsx), localStorage-backed); this phase added the missing [src/app/cart/page.tsx](src/app/cart/page.tsx) view (line items, quantity edit, remove, subtotal) and pointed [src/components/cart-indicator.tsx](src/components/cart-indicator.tsx) at it
+  - Note: all Stripe/payment work (checkout session creation, Connect destination charge, order writing) has been deferred to [Phase 12](#phase-12--checkout--payments-stripe), so this phase only covers the cart itself — the cart page has a disabled "Checkout (coming soon)" button as a placeholder.
 
 ## Phase 8 — Profile & Orders
-- [ ] Profile page (view/edit account details)
-- [ ] Order history list + order detail view (including current status: pending/shipped/delivered)
-- [ ] Wishlist/favorites: signed-in users can save products to a personal wishlist and view/remove them from their profile
+- [x] Profile page (view/edit account details) — [src/app/account/page.tsx](src/app/account/page.tsx) now edits `profiles.full_name` via [src/components/profile-form.tsx](src/components/profile-form.tsx) + [src/lib/account/actions.ts](src/lib/account/actions.ts)
+- [x] Order history list + order detail view (including current status: pending/shipped/delivered) — [src/app/account/orders/page.tsx](src/app/account/orders/page.tsx), [src/app/account/orders/[id]/page.tsx](src/app/account/orders/%5Bid%5D/page.tsx), data access in [src/lib/orders.ts](src/lib/orders.ts); UI is built against the existing `orders`/`order_items` schema and will show empty until [Phase 12](#phase-12--checkout--payments-stripe) actually creates orders
+- [x] Wishlist/favorites: signed-in users can save products to a personal wishlist and view/remove them from their profile — [src/components/wishlist-button.tsx](src/components/wishlist-button.tsx) (product detail page) + [src/app/account/wishlist/page.tsx](src/app/account/wishlist/page.tsx), mutations in [src/lib/wishlist/actions.ts](src/lib/wishlist/actions.ts), reads (`getWishlistProducts`/`isProductWishlisted`) added to [src/lib/catalog.ts](src/lib/catalog.ts)
 
 ## Phase 9 — Contact/Feedback & Email Subscription
 - [ ] Contact/feedback form → sends via Resend to your inbox, stores submission in DB
@@ -110,8 +107,11 @@ This plan implements the requirements in [README.md](README.md), based on the te
 - [ ] Standalone `/coming-soon` page with slideshow
 - [ ] Admin screen to add/edit/reorder/remove slides
 
-## Phase 12 — Migration Details
-- [ ] Confirm no GoDaddy ad banner exists in the rebuild (not applicable — rebuilt from scratch, not on GoDaddy hosting)
+## Phase 12 — Checkout & Payments (Stripe)
+- [ ] Stripe Checkout session creation (server-side API route)
+- [ ] Stripe Connect destination charge: automatically routes 10% of profit to your connected account on every successful payment
+- [ ] Order + order_items written to DB on successful webhook confirmation
+- [ ] Test entirely in Stripe test mode before go-live
 
 ## Phase 13 — Testing
 - [ ] Unit tests for utilities/business logic (e.g. cart totals, sort/filter logic)

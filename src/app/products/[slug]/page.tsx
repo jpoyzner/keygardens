@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getProductBySlug, getProductReviews, getRelatedProducts } from "@/lib/catalog";
+import {
+  getProductBySlug,
+  getProductReviews,
+  getRelatedProducts,
+  isProductWishlisted,
+} from "@/lib/catalog";
 import { createClient } from "@/lib/supabase/server";
 import { ProductGallery } from "@/components/product-gallery";
 import { AddToCartButton } from "@/components/add-to-cart-button";
 import { ShareButton } from "@/components/share-button";
+import { WishlistButton } from "@/components/wishlist-button";
 import { StarRating } from "@/components/star-rating";
 import { ProductReviews } from "@/components/product-reviews";
 import { ProductCard } from "@/components/product-card";
@@ -60,6 +66,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     getProductReviews(product.id),
     getRelatedProducts(product.categorySlug, product.id),
   ]);
+  const wishlisted = user ? await isProductWishlisted(user.id, product.id) : false;
 
   const onSale = product.salePrice != null && product.salePrice < product.price;
 
@@ -101,6 +108,12 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
           <div className="mt-2 flex items-center gap-3">
             <AddToCartButton product={product} />
+            <WishlistButton
+              productId={product.id}
+              slug={product.slug}
+              initialWishlisted={wishlisted}
+              isSignedIn={!!user}
+            />
             <ShareButton title={product.name} text={product.description ?? undefined} />
           </div>
         </div>

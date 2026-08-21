@@ -218,6 +218,39 @@ export async function getRelatedProducts(
   return products.filter((product) => product.id !== excludeProductId).slice(0, limit);
 }
 
+interface WishlistRow {
+  product_id: string;
+  products: ProductRow;
+}
+
+// RLS ("Wishlist items are viewable by owner") already scopes this to the
+// signed-in user, so no explicit user_id filter is needed here.
+export async function getWishlistProducts(): Promise<ProductSummary[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("wishlist_items")
+    .select(
+      "product_id, created_at, products(id, slug, name, price, sale_price, currency, free_shipping, created_at, categories(slug, name), product_images(storage_path, alt_text, sort_order), product_reviews(count))",
+    )
+    .order("created_at", { ascending: false });
+  if (error) throw new Error(`Failed to load wishlist: ${error.message}`);
+
+  const rows = (data ?? []) as unknown as WishlistRow[];
+  return rows.filter((row) => row.products).map((row) => toProductSummary(supabase, row.products));
+}
+
+export async function isProductWishlisted(userId: string, productId: string): Promise<boolean> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("wishlist_items")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("product_id", productId)
+    .maybeSingle();
+  if (error) throw new Error(`Failed to check wishlist: ${error.message}`);
+  return !!data;
+}
+
 export async function searchProducts(query: string): Promise<ProductSummary[]> {
   const needle = query.trim().toLowerCase();
   if (!needle) return [];
