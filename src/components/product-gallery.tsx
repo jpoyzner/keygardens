@@ -69,7 +69,7 @@ export function ProductGallery({
               onClick={() => setActiveIndex(index)}
               aria-label={`Show image ${index + 1}`}
               className={`relative h-16 w-16 shrink-0 overflow-hidden rounded border ${
-                index === activeIndex ? "border-zinc-900" : "border-zinc-200"
+                index === activeIndex ? "border-white" : "border-zinc-700"
               }`}
             >
               <Image src={image.url} alt={image.alt ?? productName} fill className="object-cover" />

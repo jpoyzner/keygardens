@@ -8,7 +8,7 @@ export function ComingSoonSlideshow({ slides }: { slides: ComingSoonSlide[] }) {
   const [index, setIndex] = useState(0);
 
   if (slides.length === 0) {
-    return <p className="text-zinc-600">More products are on the way — check back soon!</p>;
+    return <p className="text-zinc-200">More products are on the way — check back soon!</p>;
   }
 
   const slide = slides[index];
@@ -16,7 +16,7 @@ export function ComingSoonSlideshow({ slides }: { slides: ComingSoonSlide[] }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="relative aspect-video overflow-hidden rounded border border-zinc-200 bg-zinc-50">
+      <div className="relative aspect-video overflow-hidden rounded border border-zinc-700 bg-zinc-900">
         <Image
           src={slide.url}
           alt={slide.caption ?? "Coming soon"}
@@ -27,14 +27,14 @@ export function ComingSoonSlideshow({ slides }: { slides: ComingSoonSlide[] }) {
         />
       </div>
 
-      {slide.caption && <p className="text-center text-zinc-700">{slide.caption}</p>}
+      <p className="text-center text-zinc-200 min-h-6">{slide.caption}</p>
 
       {slides.length > 1 && (
         <div className="flex items-center justify-center gap-4">
           <button
             type="button"
             onClick={() => goTo(index - 1)}
-            className="rounded border border-zinc-300 px-3 py-1 text-sm"
+            className="rounded border border-zinc-600 px-3 py-1 text-sm"
             aria-label="Previous slide"
           >
             ‹ Prev
@@ -46,14 +46,14 @@ export function ComingSoonSlideshow({ slides }: { slides: ComingSoonSlide[] }) {
                 type="button"
                 onClick={() => setIndex(i)}
                 aria-label={`Go to slide ${i + 1}`}
-                className={`h-2 w-2 rounded-full ${i === index ? "bg-zinc-900" : "bg-zinc-300"}`}
+                className={`h-2 w-2 rounded-full ${i === index ? "bg-white" : "bg-zinc-700"}`}
               />
             ))}
           </div>
           <button
             type="button"
             onClick={() => goTo(index + 1)}
-            className="rounded border border-zinc-300 px-3 py-1 text-sm"
+            className="rounded border border-zinc-600 px-3 py-1 text-sm"
             aria-label="Next slide"
           >
             Next ›

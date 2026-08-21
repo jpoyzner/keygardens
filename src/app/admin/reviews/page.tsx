@@ -24,7 +24,7 @@ export default async function AdminReviewsPage() {
         {reviews.map((review) => (
           <li
             key={review.id}
-            className="flex flex-col gap-2 rounded border border-zinc-200 px-4 py-3"
+            className="flex flex-col gap-2 rounded border border-zinc-700 px-4 py-3"
           >
             <div className="flex items-center justify-between">
               <Link
@@ -33,12 +33,12 @@ export default async function AdminReviewsPage() {
               >
                 {review.productName}
               </Link>
-              <span className="text-xs text-zinc-500">{formatDate(review.createdAt)}</span>
+              <span className="text-xs text-zinc-300">{formatDate(review.createdAt)}</span>
             </div>
             <StarRating rating={review.rating} />
-            <p className="text-sm text-zinc-700">{review.body}</p>
+            <p className="text-sm text-zinc-200">{review.body}</p>
             <div className="flex items-center justify-between">
-              <span className="text-xs text-zinc-500">by {review.reviewerName}</span>
+              <span className="text-xs text-zinc-300">by {review.reviewerName}</span>
               <form action={deleteReview.bind(null, review.id, review.productSlug)}>
                 <button type="submit" className="text-xs text-red-600 underline">
                   Remove review
@@ -47,7 +47,7 @@ export default async function AdminReviewsPage() {
             </div>
           </li>
         ))}
-        {reviews.length === 0 && <p className="text-sm text-zinc-600">No reviews yet.</p>}
+        {reviews.length === 0 && <p className="text-sm text-zinc-200">No reviews yet.</p>}
       </ul>
     </div>
   );

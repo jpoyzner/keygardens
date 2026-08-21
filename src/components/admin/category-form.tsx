@@ -53,7 +53,7 @@ export function CategoryForm({ category }: { category?: Category }) {
       <button
         type="submit"
         disabled={pending}
-        className="rounded bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-50"
+        className="rounded bg-white px-3 py-1.5 text-sm font-medium text-zinc-900 disabled:opacity-50"
       >
         {pending ? "Saving..." : category ? "Save" : "Add category"}
       </button>

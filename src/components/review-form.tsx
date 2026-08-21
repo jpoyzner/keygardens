@@ -20,7 +20,7 @@ export function ReviewForm({
   const [rating, setRating] = useState(existingReview?.rating ?? 5);
 
   return (
-    <form action={formAction} className="flex flex-col gap-3 rounded border border-zinc-200 p-4">
+    <form action={formAction} className="flex flex-col gap-3 rounded border border-zinc-700 p-4">
       <h3 className="text-sm font-semibold">
         {existingReview ? "Edit your review" : "Leave a review"}
       </h3>
@@ -33,7 +33,7 @@ export function ReviewForm({
             aria-checked={rating === value}
             aria-label={`${value} star${value === 1 ? "" : "s"}`}
             onClick={() => setRating(value)}
-            className={`text-2xl leading-none ${value <= rating ? "text-amber-500" : "text-zinc-300"}`}
+            className={`text-2xl leading-none ${value <= rating ? "text-amber-500" : "text-zinc-600"}`}
           >
             ★
           </button>
@@ -52,7 +52,7 @@ export function ReviewForm({
       <button
         type="submit"
         disabled={pending}
-        className="self-start rounded bg-zinc-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+        className="self-start rounded bg-white px-4 py-2 text-sm font-medium text-zinc-900 disabled:opacity-50"
       >
         {pending ? "Submitting..." : existingReview ? "Update review" : "Submit review"}
       </button>

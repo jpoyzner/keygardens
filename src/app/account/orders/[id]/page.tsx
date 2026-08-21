@@ -22,7 +22,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
   const address = order.shippingAddress;
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-16">
+    <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 rounded-lg border border-white bg-black my-8 px-4 py-8">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Order #{order.id.slice(0, 8)}</h1>
         <Link href="/account/orders" className="text-sm underline">
@@ -30,7 +30,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
         </Link>
       </div>
 
-      <div className="flex flex-wrap items-center gap-4 text-sm text-zinc-600">
+      <div className="flex flex-wrap items-center gap-4 text-sm text-zinc-200">
         <span>{formatDate(order.createdAt)}</span>
         <span className="rounded-full bg-zinc-100 px-3 py-1 font-medium text-zinc-900 capitalize">
           {order.status}
@@ -41,11 +41,11 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
         {order.items.map((item) => (
           <li
             key={item.id}
-            className="flex items-center justify-between border-b border-zinc-200 pb-3"
+            className="flex items-center justify-between border-b border-zinc-700 pb-3"
           >
             <div className="flex flex-col gap-0.5">
               <span className="text-sm font-medium">{item.productName}</span>
-              <span className="text-xs text-zinc-500">
+              <span className="text-xs text-zinc-300">
                 Qty {item.quantity} × {formatPrice(item.unitPrice, order.currency)}
               </span>
             </div>
@@ -56,7 +56,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
         ))}
       </ul>
 
-      <div className="flex flex-col gap-1 border-t border-zinc-200 pt-4 text-sm">
+      <div className="flex flex-col gap-1 border-t border-zinc-700 pt-4 text-sm">
         <div className="flex justify-between">
           <span>Subtotal</span>
           <span>{formatPrice(order.subtotal, order.currency)}</span>
@@ -67,7 +67,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
         </div>
       </div>
 
-      <div className="flex flex-col gap-1 text-sm text-zinc-600">
+      <div className="flex flex-col gap-1 text-sm text-zinc-200">
         <span>Contact: {order.contactEmail}</span>
         {address && (
           <span>

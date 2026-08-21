@@ -35,9 +35,9 @@ export function ProductFilters({
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-4 border-b border-zinc-200 pb-4">
+    <div className="flex flex-wrap items-center gap-4 border-b border-zinc-700 pb-4">
       <div className="flex flex-col gap-1">
-        <label htmlFor="category" className="text-xs font-medium text-zinc-500">
+        <label htmlFor="category" className="text-xs font-medium text-zinc-300">
           Category
         </label>
         <select
@@ -55,7 +55,7 @@ export function ProductFilters({
         </select>
       </div>
       <div className="flex flex-col gap-1">
-        <label htmlFor="sort" className="text-xs font-medium text-zinc-500">
+        <label htmlFor="sort" className="text-xs font-medium text-zinc-300">
           Sort by
         </label>
         <select

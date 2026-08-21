@@ -39,7 +39,7 @@ export function AddToCartButton({ product }: { product: ProductDetail }) {
       <button
         type="button"
         onClick={handleAdd}
-        className="rounded bg-zinc-900 px-5 py-2.5 text-sm font-medium whitespace-nowrap text-white hover:bg-zinc-700"
+        className="rounded bg-white px-5 py-2.5 text-sm font-medium whitespace-nowrap text-zinc-900 hover:bg-zinc-200"
       >
         {added ? "Added ✓" : "Add to cart"}
       </button>

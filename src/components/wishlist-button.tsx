@@ -22,7 +22,7 @@ export function WishlistButton({
 
   if (!isSignedIn) {
     return (
-      <Link href={`/login?next=/products/${slug}`} className="text-sm text-zinc-600 underline">
+      <Link href={`/login?next=/products/${slug}`} className="text-sm text-zinc-300 underline">
         Sign in to save
       </Link>
     );
@@ -37,7 +37,7 @@ export function WishlistButton({
           type="submit"
           disabled={pending}
           aria-pressed={wishlisted}
-          className="rounded border border-zinc-300 px-4 py-2.5 text-sm font-medium whitespace-nowrap hover:border-zinc-400 disabled:opacity-50"
+          className="rounded border border-zinc-600 px-4 py-2.5 text-sm font-medium whitespace-nowrap hover:border-zinc-500 disabled:opacity-50"
         >
           {wishlisted ? "♥ Saved" : "♡ Save for later"}
         </button>

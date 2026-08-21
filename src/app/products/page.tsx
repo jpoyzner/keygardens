@@ -24,12 +24,12 @@ export default async function ProductsPage({
     : null;
 
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-12">
+    <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 rounded-lg border border-white bg-black my-6 px-4 py-6">
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-semibold capitalize">
           {activeCategoryName ?? "All Products"}
         </h1>
-        <p className="text-sm text-zinc-600">
+        <p className="text-sm text-zinc-200">
           {products.length} {products.length === 1 ? "product" : "products"}
         </p>
       </div>
@@ -41,7 +41,7 @@ export default async function ProductsPage({
       />
 
       {products.length === 0 ? (
-        <p className="py-12 text-center text-zinc-500">No products found.</p>
+        <p className="py-12 text-center text-zinc-300">No products found.</p>
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {products.map((product) => (

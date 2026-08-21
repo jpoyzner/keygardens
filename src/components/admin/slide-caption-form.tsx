@@ -21,7 +21,7 @@ export function SlideCaptionForm({ id, caption }: { id: string; caption: string 
       <button
         type="submit"
         disabled={pending}
-        className="rounded border border-zinc-300 px-2 py-1 text-xs disabled:opacity-50"
+        className="rounded border border-zinc-600 px-2 py-1 text-xs disabled:opacity-50"
       >
         {pending ? "Saving..." : "Save"}
       </button>

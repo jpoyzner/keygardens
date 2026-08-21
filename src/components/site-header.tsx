@@ -21,7 +21,7 @@ export async function SiteHeader() {
   }
 
   return (
-    <header className="flex items-center justify-between border-b border-zinc-200 px-6 py-4">
+    <header className="sticky top-0 z-50 flex items-center justify-between border-b border-white bg-black px-6 py-4 text-white">
       <Link href="/" className="font-semibold">
         Keygardens
       </Link>

@@ -17,9 +17,9 @@ export default async function AdminComingSoonPage() {
         {slides.map((slide, index) => (
           <li
             key={slide.id}
-            className="flex flex-wrap items-center gap-4 rounded border border-zinc-200 px-4 py-3"
+            className="flex flex-wrap items-center gap-4 rounded border border-zinc-700 px-4 py-3"
           >
-            <div className="relative h-16 w-24 overflow-hidden rounded border border-zinc-200">
+            <div className="relative h-16 w-24 overflow-hidden rounded border border-zinc-700">
               <Image src={slide.url} alt={slide.caption ?? ""} fill className="object-cover" />
             </div>
             <SlideCaptionForm id={slide.id} caption={slide.caption} />
@@ -55,10 +55,10 @@ export default async function AdminComingSoonPage() {
             </div>
           </li>
         ))}
-        {slides.length === 0 && <p className="text-sm text-zinc-600">No slides yet.</p>}
+        {slides.length === 0 && <p className="text-sm text-zinc-200">No slides yet.</p>}
       </ul>
 
-      <div className="rounded border border-dashed border-zinc-300 px-4 py-3">
+      <div className="rounded border border-dashed border-zinc-600 px-4 py-3">
         <h2 className="mb-2 text-sm font-medium">Add a slide</h2>
         <NewSlideForm />
       </div>

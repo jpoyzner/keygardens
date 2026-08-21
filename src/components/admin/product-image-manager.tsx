@@ -28,7 +28,7 @@ export function ProductImageManager({
       <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {images.map((image) => (
           <li key={image.id} className="flex flex-col gap-2">
-            <div className="relative aspect-square overflow-hidden rounded border border-zinc-200">
+            <div className="relative aspect-square overflow-hidden rounded border border-zinc-700">
               <Image
                 src={image.url}
                 alt={image.altText ?? ""}
@@ -45,7 +45,7 @@ export function ProductImageManager({
           </li>
         ))}
         {images.length === 0 && (
-          <p className="col-span-full text-sm text-zinc-600">No images yet.</p>
+          <p className="col-span-full text-sm text-zinc-200">No images yet.</p>
         )}
       </ul>
 
@@ -74,7 +74,7 @@ export function ProductImageManager({
         <button
           type="submit"
           disabled={pending}
-          className="rounded bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-50"
+          className="rounded bg-white px-3 py-1.5 text-sm font-medium text-zinc-900 disabled:opacity-50"
         >
           {pending ? "Uploading..." : "Upload image"}
         </button>

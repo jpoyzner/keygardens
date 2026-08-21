@@ -3,7 +3,7 @@ export function StarRating({ rating, size = "text-base" }: { rating: number; siz
   return (
     <span className={`text-amber-500 ${size}`} aria-label={`${rating.toFixed(1)} out of 5 stars`}>
       {"★".repeat(rounded)}
-      <span className="text-zinc-300">{"★".repeat(5 - rounded)}</span>
+      <span className="text-zinc-600">{"★".repeat(5 - rounded)}</span>
     </span>
   );
 }

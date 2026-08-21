@@ -33,10 +33,10 @@ export default function AdminPage() {
           <Link
             key={section.href}
             href={section.href}
-            className="flex flex-col gap-1 rounded border border-zinc-200 px-4 py-3 hover:border-zinc-400"
+            className="flex flex-col gap-1 rounded border border-zinc-700 px-4 py-3 hover:border-zinc-500"
           >
             <span className="font-medium">{section.label}</span>
-            <span className="text-sm text-zinc-600">{section.description}</span>
+            <span className="text-sm text-zinc-200">{section.description}</span>
           </Link>
         ))}
       </div>

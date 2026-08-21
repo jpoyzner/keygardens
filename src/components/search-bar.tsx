@@ -17,7 +17,7 @@ export function SearchBar() {
         type="search"
         defaultValue={defaultValue}
         placeholder="Search products…"
-        className="w-32 rounded border border-zinc-300 px-2 py-1.5 text-sm focus:w-48 focus:outline-none sm:w-40"
+        className="w-32 rounded border border-zinc-300 px-2 py-1.5 text-sm focus:w-48 focus:outline-none focus:ring-2 focus:ring-white sm:w-40"
       />
     </form>
   );

@@ -15,7 +15,7 @@ export default async function AdminCategoriesPage() {
         {categories.map((category) => (
           <li
             key={category.id}
-            className="flex flex-wrap items-end justify-between gap-2 rounded border border-zinc-200 px-4 py-3"
+            className="flex flex-wrap items-end justify-between gap-2 rounded border border-zinc-700 px-4 py-3"
           >
             <CategoryForm category={category} />
             <form action={deleteCategory.bind(null, category.id)}>
@@ -25,10 +25,10 @@ export default async function AdminCategoriesPage() {
             </form>
           </li>
         ))}
-        {categories.length === 0 && <p className="text-sm text-zinc-600">No categories yet.</p>}
+        {categories.length === 0 && <p className="text-sm text-zinc-200">No categories yet.</p>}
       </ul>
 
-      <div className="rounded border border-dashed border-zinc-300 px-4 py-3">
+      <div className="rounded border border-dashed border-zinc-600 px-4 py-3">
         <h2 className="mb-2 text-sm font-medium">Add a category</h2>
         <CategoryForm />
       </div>

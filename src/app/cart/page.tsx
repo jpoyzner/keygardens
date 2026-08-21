@@ -13,9 +13,9 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-4 px-4 py-16">
+      <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-4 rounded-lg border border-white bg-black my-8 px-4 py-8">
         <h1 className="text-2xl font-semibold">Your cart</h1>
-        <p className="text-zinc-600">Your cart is empty.</p>
+        <p className="text-zinc-200">Your cart is empty.</p>
         <Link href="/products" className="self-start underline">
           Continue shopping
         </Link>
@@ -27,14 +27,14 @@ export default function CartPage() {
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-16">
+    <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 rounded-lg border border-white bg-black my-8 px-4 py-8">
       <h1 className="text-2xl font-semibold">Your cart</h1>
 
       <ul className="flex flex-col gap-4">
         {items.map((item) => (
           <li
             key={item.productId}
-            className="flex items-center gap-4 border-b border-zinc-200 pb-4"
+            className="flex items-center gap-4 border-b border-zinc-700 pb-4"
           >
             <div className="relative size-20 shrink-0 overflow-hidden rounded bg-zinc-100">
               {item.imageUrl ? (
@@ -55,7 +55,7 @@ export default function CartPage() {
               <Link href={`/products/${item.slug}`} className="text-sm font-medium capitalize">
                 {item.name}
               </Link>
-              <span className="text-sm text-zinc-500">
+              <span className="text-sm text-zinc-300">
                 {formatPrice(item.price, item.currency)}
               </span>
             </div>
@@ -75,7 +75,7 @@ export default function CartPage() {
             <button
               type="button"
               onClick={() => removeItem(item.productId)}
-              className="text-sm text-zinc-500 underline hover:text-red-600"
+              className="text-sm text-zinc-300 underline hover:text-red-600"
             >
               Remove
             </button>
@@ -83,7 +83,7 @@ export default function CartPage() {
         ))}
       </ul>
 
-      <div className="flex items-center justify-between border-t border-zinc-200 pt-4">
+      <div className="flex items-center justify-between border-t border-zinc-700 pt-4">
         <span className="font-semibold">Subtotal</span>
         <span className="font-semibold">{formatPrice(subtotal, currency)}</span>
       </div>
@@ -92,7 +92,7 @@ export default function CartPage() {
         type="button"
         disabled
         title="Checkout is coming soon"
-        className="self-end rounded bg-zinc-900 px-5 py-2.5 text-sm font-medium text-white opacity-50"
+        className="self-end rounded bg-white px-5 py-2.5 text-sm font-medium text-zinc-900 opacity-50"
       >
         Checkout (coming soon)
       </button>

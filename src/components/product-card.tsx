@@ -12,7 +12,7 @@ export function ProductCard({ product }: { product: ProductSummary }) {
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group flex flex-col gap-2 rounded-lg border border-zinc-200 p-3 transition-colors hover:border-zinc-400"
+      className="group flex flex-col gap-2 rounded-lg border border-white bg-black p-3 transition-colors hover:border-zinc-500"
     >
       <div className="relative aspect-square w-full overflow-hidden rounded bg-zinc-100">
         {product.imageUrl ? (
@@ -35,9 +35,9 @@ export function ProductCard({ product }: { product: ProductSummary }) {
         )}
       </div>
       <div className="flex flex-col gap-0.5">
-        <span className="text-sm font-medium text-zinc-900 capitalize">{product.name}</span>
+        <span className="text-sm font-medium text-white capitalize">{product.name}</span>
         {product.categoryName && (
-          <span className="text-xs text-zinc-500 capitalize">{product.categoryName}</span>
+          <span className="text-xs text-zinc-300 capitalize">{product.categoryName}</span>
         )}
         <div className="flex items-center gap-2 text-sm">
           {onSale ? (
@@ -50,7 +50,7 @@ export function ProductCard({ product }: { product: ProductSummary }) {
               </span>
             </>
           ) : (
-            <span className="font-semibold text-zinc-900">
+            <span className="font-semibold text-white">
               {formatPrice(product.price, product.currency)}
             </span>
           )}

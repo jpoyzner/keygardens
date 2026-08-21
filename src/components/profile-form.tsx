@@ -26,7 +26,7 @@ export function ProfileForm({ fullName }: { fullName: string | null }) {
       <button
         type="submit"
         disabled={pending}
-        className="self-start rounded bg-zinc-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+        className="self-start rounded bg-white px-4 py-2 text-sm font-medium text-zinc-900 disabled:opacity-50"
       >
         {pending ? "Saving..." : "Save changes"}
       </button>

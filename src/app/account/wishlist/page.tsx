@@ -6,7 +6,7 @@ export default async function WishlistPage() {
   const products = await getWishlistProducts();
 
   return (
-    <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-4 py-16">
+    <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 rounded-lg border border-white bg-black my-8 px-4 py-8">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Wishlist</h1>
         <Link href="/account" className="text-sm underline">
@@ -15,7 +15,7 @@ export default async function WishlistPage() {
       </div>
 
       {products.length === 0 ? (
-        <p className="text-zinc-600">
+        <p className="text-zinc-200">
           You haven&apos;t saved any products yet. Tap &ldquo;Save for later&rdquo; on a product
           page to add it here.
         </p>

@@ -34,8 +34,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-8 px-4 py-16">
-      <nav className="flex flex-wrap gap-4 border-b border-zinc-200 pb-4 text-sm">
+    <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-8 rounded-lg border border-white bg-black my-8 px-4 py-8">
+      <nav className="flex flex-wrap gap-4 border-b border-zinc-700 pb-4 text-sm">
         {NAV_LINKS.map((link) => (
           <Link key={link.href} href={link.href} className="underline">
             {link.label}

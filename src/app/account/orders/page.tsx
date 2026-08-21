@@ -17,7 +17,7 @@ export default async function OrdersPage() {
   const orders = await getOrders();
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-16">
+    <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 rounded-lg border border-white bg-black my-8 px-4 py-8">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Order history</h1>
         <Link href="/account" className="text-sm underline">
@@ -26,18 +26,18 @@ export default async function OrdersPage() {
       </div>
 
       {orders.length === 0 ? (
-        <p className="text-zinc-600">You haven&apos;t placed any orders yet.</p>
+        <p className="text-zinc-200">You haven&apos;t placed any orders yet.</p>
       ) : (
         <ul className="flex flex-col gap-3">
           {orders.map((order) => (
             <li key={order.id}>
               <Link
                 href={`/account/orders/${order.id}`}
-                className="flex items-center justify-between rounded border border-zinc-200 px-4 py-3 hover:border-zinc-400"
+                className="flex items-center justify-between rounded border border-zinc-700 px-4 py-3 hover:border-zinc-500"
               >
                 <div className="flex flex-col gap-0.5">
                   <span className="text-sm font-medium">Order #{order.id.slice(0, 8)}</span>
-                  <span className="text-xs text-zinc-500">
+                  <span className="text-xs text-zinc-300">
                     {formatDate(order.createdAt)} · {order.itemCount} item
                     {order.itemCount === 1 ? "" : "s"}
                   </span>
@@ -46,7 +46,7 @@ export default async function OrdersPage() {
                   <span className="text-sm font-semibold">
                     {formatPrice(order.total, order.currency)}
                   </span>
-                  <span className="text-xs text-zinc-500 capitalize">{order.status}</span>
+                  <span className="text-xs text-zinc-400 capitalize">{order.status}</span>
                 </div>
               </Link>
             </li>

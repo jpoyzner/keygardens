@@ -25,7 +25,7 @@ export function SubscribeForm() {
       <button
         type="submit"
         disabled={pending}
-        className="rounded bg-zinc-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+        className="rounded bg-white px-4 py-2 text-sm font-medium text-zinc-900 disabled:opacity-50"
       >
         {pending ? "Subscribing..." : "Notify me"}
       </button>

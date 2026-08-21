@@ -27,7 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col" suppressHydrationWarning>
         <CartProvider>
           <SiteHeader />
-          {children}
+          <main className="flex flex-1 flex-col">{children}</main>
         </CartProvider>
       </body>
     </html>

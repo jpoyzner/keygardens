@@ -24,7 +24,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
 
       <ProductForm categories={categories} product={product} />
 
-      <div className="flex flex-col gap-3 border-t border-zinc-200 pt-6">
+      <div className="flex flex-col gap-3 border-t border-zinc-700 pt-6">
         <h2 className="text-lg font-medium">Images</h2>
         <ProductImageManager
           productId={product.id}
@@ -33,7 +33,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
         />
       </div>
 
-      <form action={deleteProduct.bind(null, product.id)} className="border-t border-zinc-200 pt-6">
+      <form action={deleteProduct.bind(null, product.id)} className="border-t border-zinc-700 pt-6">
         <button type="submit" className="text-sm text-red-600 underline">
           Delete product
         </button>

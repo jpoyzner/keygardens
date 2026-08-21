@@ -27,11 +27,11 @@ export default async function AdminOrdersPage() {
           <li key={order.id}>
             <Link
               href={`/admin/orders/${order.id}`}
-              className="flex items-center justify-between rounded border border-zinc-200 px-4 py-3 hover:border-zinc-400"
+              className="flex items-center justify-between rounded border border-zinc-700 px-4 py-3 hover:border-zinc-500"
             >
               <div className="flex flex-col gap-0.5">
                 <span className="text-sm font-medium">Order #{order.id.slice(0, 8)}</span>
-                <span className="text-xs text-zinc-500">
+                <span className="text-xs text-zinc-300">
                   {formatDate(order.createdAt)} · {order.itemCount} item
                   {order.itemCount === 1 ? "" : "s"}
                 </span>
@@ -40,12 +40,12 @@ export default async function AdminOrdersPage() {
                 <span className="text-sm font-semibold">
                   {formatPrice(order.total, order.currency)}
                 </span>
-                <span className="text-xs text-zinc-500 capitalize">{order.status}</span>
+                <span className="text-xs text-zinc-300 capitalize">{order.status}</span>
               </div>
             </Link>
           </li>
         ))}
-        {orders.length === 0 && <p className="text-sm text-zinc-600">No orders yet.</p>}
+        {orders.length === 0 && <p className="text-sm text-zinc-200">No orders yet.</p>}
       </ul>
     </div>
   );

@@ -16,7 +16,7 @@ export default async function AdminProductsPage() {
         <h1 className="text-2xl font-semibold">Products</h1>
         <Link
           href="/admin/products/new"
-          className="rounded bg-zinc-900 px-4 py-2 text-sm font-medium text-white"
+          className="rounded bg-white px-4 py-2 text-sm font-medium text-zinc-900"
         >
           New product
         </Link>
@@ -27,11 +27,11 @@ export default async function AdminProductsPage() {
           <li key={product.id}>
             <Link
               href={`/admin/products/${product.id}`}
-              className="flex items-center justify-between rounded border border-zinc-200 px-4 py-3 hover:border-zinc-400"
+              className="flex items-center justify-between rounded border border-zinc-700 px-4 py-3 hover:border-zinc-500"
             >
               <div className="flex flex-col gap-0.5">
                 <span className="text-sm font-medium">{product.name}</span>
-                <span className="text-xs text-zinc-500">
+                <span className="text-xs text-zinc-300">
                   {product.categoryName ?? "Uncategorized"}
                 </span>
               </div>
@@ -46,7 +46,7 @@ export default async function AdminProductsPage() {
             </Link>
           </li>
         ))}
-        {products.length === 0 && <p className="text-sm text-zinc-600">No products yet.</p>}
+        {products.length === 0 && <p className="text-sm text-zinc-200">No products yet.</p>}
       </ul>
     </div>
   );

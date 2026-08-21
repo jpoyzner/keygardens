@@ -38,7 +38,7 @@ export default async function AdminOrderDetailPage({
       </div>
 
       <div className="flex flex-wrap items-center gap-4">
-        <span className="text-sm text-zinc-600">{formatDate(order.createdAt)}</span>
+        <span className="text-sm text-zinc-200">{formatDate(order.createdAt)}</span>
         <OrderStatusForm orderId={order.id} status={order.status} />
       </div>
 
@@ -46,11 +46,11 @@ export default async function AdminOrderDetailPage({
         {order.items.map((item) => (
           <li
             key={item.id}
-            className="flex items-center justify-between border-b border-zinc-200 pb-3"
+            className="flex items-center justify-between border-b border-zinc-700 pb-3"
           >
             <div className="flex flex-col gap-0.5">
               <span className="text-sm font-medium">{item.productName}</span>
-              <span className="text-xs text-zinc-500">
+              <span className="text-xs text-zinc-300">
                 Qty {item.quantity} × {formatPrice(item.unitPrice, order.currency)}
               </span>
             </div>
@@ -61,7 +61,7 @@ export default async function AdminOrderDetailPage({
         ))}
       </ul>
 
-      <div className="flex flex-col gap-1 border-t border-zinc-200 pt-4 text-sm">
+      <div className="flex flex-col gap-1 border-t border-zinc-700 pt-4 text-sm">
         <div className="flex justify-between">
           <span>Subtotal</span>
           <span>{formatPrice(order.subtotal, order.currency)}</span>
@@ -72,7 +72,7 @@ export default async function AdminOrderDetailPage({
         </div>
       </div>
 
-      <div className="flex flex-col gap-1 text-sm text-zinc-600">
+      <div className="flex flex-col gap-1 text-sm text-zinc-200">
         <span>Contact: {order.contactEmail}</span>
         {address && (
           <span>

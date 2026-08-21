@@ -71,7 +71,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const onSale = product.salePrice != null && product.salePrice < product.price;
 
   return (
-    <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-12 px-4 py-12">
+    <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-12 rounded-lg border border-white bg-black my-6 px-4 py-6">
       <div className="flex flex-col gap-8 sm:flex-row">
         <div className="w-full sm:max-w-md">
           <ProductGallery images={product.images} productName={product.name} />
@@ -79,12 +79,12 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         <div className="flex flex-1 flex-col gap-3">
           <h1 className="text-2xl font-semibold capitalize">{product.name}</h1>
           {product.categoryName && (
-            <span className="text-sm text-zinc-500 capitalize">{product.categoryName}</span>
+            <span className="text-sm text-zinc-300 capitalize">{product.categoryName}</span>
           )}
           {reviewSummary.count > 0 && (
             <div className="flex items-center gap-2">
               <StarRating rating={reviewSummary.averageRating} />
-              <span className="text-sm text-zinc-500">({reviewSummary.count})</span>
+              <span className="text-sm text-zinc-300">({reviewSummary.count})</span>
             </div>
           )}
           <div className="flex items-center gap-2 text-lg">
@@ -98,13 +98,13 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                 </span>
               </>
             ) : (
-              <span className="font-semibold text-zinc-900">
+              <span className="font-semibold text-white">
                 {formatPrice(product.price, product.currency)}
               </span>
             )}
           </div>
           {product.freeShipping && <span className="text-sm text-emerald-600">Free shipping</span>}
-          {product.description && <p className="text-zinc-600">{product.description}</p>}
+          {product.description && <p className="text-zinc-200">{product.description}</p>}
 
           <div className="mt-2 flex items-center gap-3">
             <AddToCartButton product={product} />
@@ -127,7 +127,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       />
 
       {relatedProducts.length > 0 && (
-        <section className="flex flex-col gap-4 border-t border-zinc-200 pt-8">
+        <section className="flex flex-col gap-4 border-t border-zinc-700 pt-8">
           <h2 className="text-lg font-semibold">You may also like</h2>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             {relatedProducts.map((related) => (
