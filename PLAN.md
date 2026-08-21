@@ -73,11 +73,11 @@ This plan implements the requirements in [README.md](README.md), based on the te
 - [x] Product preview cards (image, name, price, quick link) — [src/components/product-card.tsx](src/components/product-card.tsx), linking to a minimal `/products/[slug]` detail page ([src/app/products/[slug]/page.tsx](src/app/products/%5Bslug%5D/page.tsx)) that Phase 5 will flesh out (zoom, cart, reviews, related products)
 
 ## Phase 5 — Product Detail Page
-- [ ] Product detail route with image zoom (e.g. hover/click-to-zoom gallery)
-- [ ] Add-to-cart action
-- [ ] Social sharing button (Web Share API) + Open Graph tags for rich link previews
-- [ ] Product reviews/ratings: signed-in users can leave a star rating + written review, shown on the product page with an average rating
-- [ ] "You may also like" related products section (same category, excluding the current product)
+- [x] Product detail route with image zoom (e.g. hover/click-to-zoom gallery) — [src/components/product-gallery.tsx](src/components/product-gallery.tsx) (hover magnifier + click-to-open lightbox, thumbnail strip for multi-image products)
+- [x] Add-to-cart action — minimal localStorage-backed cart context ([src/lib/cart/cart-context.tsx](src/lib/cart/cart-context.tsx)) + [src/components/add-to-cart-button.tsx](src/components/add-to-cart-button.tsx) and a header cart count ([src/components/cart-indicator.tsx](src/components/cart-indicator.tsx)); Phase 7 will add server-side persistence and checkout on top of this
+- [x] Social sharing button (Web Share API) + Open Graph tags for rich link previews — [src/components/share-button.tsx](src/components/share-button.tsx) (falls back to copy-link), `generateMetadata` in [src/app/products/[slug]/page.tsx](src/app/products/%5Bslug%5D/page.tsx)
+- [x] Product reviews/ratings: signed-in users can leave a star rating + written review, shown on the product page with an average rating — [src/components/product-reviews.tsx](src/components/product-reviews.tsx), [src/components/review-form.tsx](src/components/review-form.tsx), [src/lib/reviews/actions.ts](src/lib/reviews/actions.ts); needs the new [supabase/migrations/20260821000000_product_reviews_reviewer_name.sql](supabase/migrations/20260821000000_product_reviews_reviewer_name.sql) migration applied — **requires you**: run it via the Supabase SQL Editor like the earlier migrations
+- [x] "You may also like" related products section (same category, excluding the current product) — `getRelatedProducts()` in [src/lib/catalog.ts](src/lib/catalog.ts)
 
 ## Phase 6 — Search
 - [ ] Search bar in header, results page with URL-synced query param

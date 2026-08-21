@@ -40,6 +40,21 @@ export interface ProductDetail extends ProductSummary {
   images: { url: string; alt: string | null }[];
 }
 
+export interface ProductReview {
+  id: string;
+  userId: string;
+  rating: number;
+  body: string | null;
+  reviewerName: string;
+  createdAt: string;
+}
+
+export interface ProductReviewSummary {
+  reviews: ProductReview[];
+  averageRating: number;
+  count: number;
+}
+
 export function publicImageUrl(supabase: SupabaseClient, storagePath: string): string {
   return supabase.storage.from(PRODUCT_IMAGES_BUCKET).getPublicUrl(storagePath).data.publicUrl;
 }
@@ -167,4 +182,38 @@ export async function getProductBySlug(slug: string): Promise<ProductDetail | nu
     .map((image) => ({ url: publicImageUrl(supabase, image.storage_path), alt: image.alt_text }));
 
   return { ...summary, description: row.description, images };
+}
+
+export async function getProductReviews(productId: string): Promise<ProductReviewSummary> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("product_reviews")
+    .select("id, user_id, rating, body, reviewer_name, created_at")
+    .eq("product_id", productId)
+    .order("created_at", { ascending: false });
+  if (error) throw new Error(`Failed to load reviews: ${error.message}`);
+
+  const reviews: ProductReview[] = (data ?? []).map((row) => ({
+    id: row.id,
+    userId: row.user_id,
+    rating: row.rating,
+    body: row.body,
+    reviewerName: row.reviewer_name,
+    createdAt: row.created_at,
+  }));
+
+  const count = reviews.length;
+  const averageRating = count === 0 ? 0 : reviews.reduce((sum, r) => sum + r.rating, 0) / count;
+
+  return { reviews, averageRating, count };
+}
+
+export async function getRelatedProducts(
+  categorySlug: string | null,
+  excludeProductId: string,
+  limit = 4,
+): Promise<ProductSummary[]> {
+  if (!categorySlug) return [];
+  const products = await getProducts({ categorySlug });
+  return products.filter((product) => product.id !== excludeProductId).slice(0, limit);
 }
