@@ -34,51 +34,55 @@ export default function CartPage() {
         {items.map((item) => (
           <li
             key={item.productId}
-            className="flex items-center gap-4 border-b border-zinc-700 pb-4"
+            className="flex flex-col gap-3 border-b border-zinc-700 pb-4 sm:flex-row sm:items-center sm:gap-4"
           >
-            <div className="relative size-20 shrink-0 overflow-hidden rounded bg-zinc-100">
-              {item.imageUrl ? (
-                <Image
-                  src={item.imageUrl}
-                  alt={item.name}
-                  fill
-                  sizes="80px"
-                  className="object-cover"
-                />
-              ) : (
-                <div className="flex h-full items-center justify-center text-xs text-zinc-400">
-                  No image
-                </div>
-              )}
+            <div className="flex items-center gap-4">
+              <div className="relative size-20 shrink-0 overflow-hidden rounded bg-zinc-100">
+                {item.imageUrl ? (
+                  <Image
+                    src={item.imageUrl}
+                    alt={item.name}
+                    fill
+                    sizes="80px"
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center text-xs text-zinc-400">
+                    No image
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-1 flex-col gap-1">
+                <Link href={`/products/${item.slug}`} className="text-sm font-medium capitalize">
+                  {item.name}
+                </Link>
+                <span className="text-sm text-zinc-300">
+                  {formatPrice(item.price, item.currency)}
+                </span>
+              </div>
             </div>
-            <div className="flex flex-1 flex-col gap-1">
-              <Link href={`/products/${item.slug}`} className="text-sm font-medium capitalize">
-                {item.name}
-              </Link>
-              <span className="text-sm text-zinc-300">
-                {formatPrice(item.price, item.currency)}
+            <div className="flex items-center justify-between gap-4 sm:justify-end">
+              <input
+                type="number"
+                min={1}
+                value={item.quantity}
+                onChange={(event) =>
+                  updateQuantity(item.productId, Math.max(1, Number(event.target.value) || 1))
+                }
+                aria-label={`Quantity for ${item.name}`}
+                className="w-16 rounded border border-zinc-300 px-2 py-1.5 text-sm"
+              />
+              <span className="w-20 text-right text-sm font-medium">
+                {formatPrice(item.price * item.quantity, item.currency)}
               </span>
+              <button
+                type="button"
+                onClick={() => removeItem(item.productId)}
+                className="text-sm text-zinc-300 underline hover:text-red-600"
+              >
+                Remove
+              </button>
             </div>
-            <input
-              type="number"
-              min={1}
-              value={item.quantity}
-              onChange={(event) =>
-                updateQuantity(item.productId, Math.max(1, Number(event.target.value) || 1))
-              }
-              aria-label={`Quantity for ${item.name}`}
-              className="w-16 rounded border border-zinc-300 px-2 py-1.5 text-sm"
-            />
-            <span className="w-20 text-right text-sm font-medium">
-              {formatPrice(item.price * item.quantity, item.currency)}
-            </span>
-            <button
-              type="button"
-              onClick={() => removeItem(item.productId)}
-              className="text-sm text-zinc-300 underline hover:text-red-600"
-            >
-              Remove
-            </button>
           </li>
         ))}
       </ul>

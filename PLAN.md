@@ -67,7 +67,7 @@ This plan implements the requirements in [README.md](README.md), based on the te
 - [x] Mark your account as `is_admin` for access to admin pages — **requires you**: sign up at `/signup`, then run `npm run make-admin -- your@email.com`. Done: `JeffPoyzner@yahoo.com` granted admin and confirmed access to `/admin`.
 
 ## Phase 4 — Core Storefront Browsing
-- [x] Home page — [src/app/page.tsx](src/app/page.tsx)
+- [x] Home page — [src/app/page.tsx](src/app/page.tsx) (a plain welcome splash with no bordered content panels; category/featured-product browsing lives on [src/app/products/page.tsx](src/app/products/page.tsx))
 - [x] All-products page and per-category/sub-category pages, with URL-synced filters (e.g. `/products?category=x&sort=price`) — [src/app/products/page.tsx](src/app/products/page.tsx), [src/components/product-filters.tsx](src/components/product-filters.tsx)
 - [x] Sorting: popularity, newness, price, alphabetical — see `SORT_OPTIONS` in [src/lib/catalog.ts](src/lib/catalog.ts) (popularity currently ranks by review count; revisit once order history exists in Phase 7)
 - [x] Product preview cards (image, name, price, quick link) — [src/components/product-card.tsx](src/components/product-card.tsx), linking to a minimal `/products/[slug]` detail page ([src/app/products/[slug]/page.tsx](src/app/products/%5Bslug%5D/page.tsx)) that Phase 5 will flesh out (zoom, cart, reviews, related products)

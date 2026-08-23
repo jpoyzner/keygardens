@@ -1,52 +1,26 @@
 import Link from "next/link";
-import { getCategories, getProducts } from "@/lib/catalog";
-import { ProductCard } from "@/components/product-card";
+import Image from "next/image";
 
-export default async function Home() {
-  const [categories, products] = await Promise.all([
-    getCategories(),
-    getProducts({ sort: "newest" }),
-  ]);
-  const featuredProducts = products.slice(0, 4);
-
+export default function Home() {
   return (
-    <div className="flex flex-1 flex-col">
-      {(categories.length > 0 || featuredProducts.length > 0) && (
-        <section className="mx-auto flex w-full max-w-6xl flex-col gap-8 rounded-lg border border-white bg-black my-6 px-4 py-6">
-          {categories.length > 0 && (
-            <div className="flex flex-col gap-4">
-              <h2 className="text-lg font-semibold">Shop by category</h2>
-              <div className="flex flex-wrap gap-3">
-                {categories.map((category) => (
-                  <Link
-                    key={category.slug}
-                    href={`/products?category=${category.slug}`}
-                    className="rounded-full border border-zinc-600 px-4 py-2 text-sm capitalize hover:border-zinc-400"
-                  >
-                    {category.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {featuredProducts.length > 0 && (
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold">New arrivals</h2>
-                <Link href="/products" className="text-sm underline">
-                  View all
-                </Link>
-              </div>
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                {featuredProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-            </div>
-          )}
-        </section>
-      )}
+    <div className="flex flex-1 flex-col items-center justify-center gap-6 px-4 py-16 pt-20 text-center">
+      <div className="flex h-32 aspect-[850/312] items-center justify-center rounded-2xl border-[6px] border-white bg-[#1d1d1b] p-4 sm:h-44">
+        <Image
+          src="/logo.png"
+          alt="Keygardens"
+          width={1034}
+          height={312}
+          className="h-full w-full object-contain"
+          priority
+        />
+      </div>
+      <Link
+        href="/products"
+        className="mt-4 flex flex-col items-center gap-2 rounded-[30px] border-2 border-white bg-white px-10 py-2 text-lg font-semibold text-zinc-900"
+      >
+        Shop now
+        <Image src="/key.png" alt="" width={252} height={414} className="h-10 w-auto object-contain" />
+      </Link>
     </div>
   );
 }
