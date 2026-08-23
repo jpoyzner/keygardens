@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCart } from "@/lib/cart/cart-context";
+import { calculateSubtotal, useCart } from "@/lib/cart/cart-context";
 import { CheckoutButton } from "@/components/checkout-button";
 
 function formatPrice(amount: number, currency: string) {
@@ -25,7 +25,7 @@ export default function CartPage() {
   }
 
   const currency = items[0].currency;
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const subtotal = calculateSubtotal(items);
 
   return (
     <div className="mx-auto my-8 flex w-full max-w-2xl flex-1 flex-col gap-6 rounded-lg border border-white bg-black px-4 py-8">

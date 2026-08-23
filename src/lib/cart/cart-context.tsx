@@ -39,6 +39,14 @@ function readStoredCart(): CartItem[] {
   }
 }
 
+export function calculateTotalQuantity(items: CartItem[]): number {
+  return items.reduce((sum, item) => sum + item.quantity, 0);
+}
+
+export function calculateSubtotal(items: CartItem[]): number {
+  return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+}
+
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [hydrated, setHydrated] = useState(false);
@@ -60,7 +68,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const value = useMemo<CartContextValue>(
     () => ({
       items,
-      totalQuantity: items.reduce((sum, item) => sum + item.quantity, 0),
+      totalQuantity: calculateTotalQuantity(items),
       addItem: (item, quantity = 1) => {
         setItems((current) => {
           const existing = current.find((i) => i.productId === item.productId);

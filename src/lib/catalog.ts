@@ -146,20 +146,34 @@ export async function getProducts(options?: {
   // Cast via `unknown`: this client has no generated Database types, so the query
   // builder can't infer relationship cardinality (it types every embed as an array).
   const allRows = (data ?? []) as unknown as ProductRow[];
+  const summaries = allRows.map((row) => toProductSummary(supabase, row));
 
   // Filtering embedded `categories` columns via PostgREST only filters which
   // embedded rows are returned, not the parent rows — so filter by category here instead.
-  const rows = allRows.filter(
-    (row) => !options?.categorySlug || row.categories?.slug === options.categorySlug,
-  );
+  const filtered = filterProductsByCategory(summaries, options?.categorySlug);
 
-  const summaries = rows.map((row) => toProductSummary(supabase, row));
+  return sort === "popularity" ? sortByPopularity(filtered) : filtered;
+}
 
-  if (sort === "popularity") {
-    summaries.sort((a, b) => b.reviewCount - a.reviewCount);
-  }
+export function filterProductsByCategory<T extends { categorySlug: string | null }>(
+  products: T[],
+  categorySlug: string | undefined,
+): T[] {
+  return products.filter((product) => !categorySlug || product.categorySlug === categorySlug);
+}
 
-  return summaries;
+// Popularity has no dedicated metric yet (no order history) — ranks by review
+// count, highest first, as a placeholder. Returns a new array (doesn't mutate).
+export function sortByPopularity<T extends { reviewCount: number }>(products: T[]): T[] {
+  return [...products].sort((a, b) => b.reviewCount - a.reviewCount);
+}
+
+// v1 search predicate: true if any field contains the query as a case-insensitive
+// substring. Used both for product search and can be unit-tested independent of the DB.
+export function matchesSearchQuery(fields: (string | null | undefined)[], query: string): boolean {
+  const needle = query.trim().toLowerCase();
+  if (!needle) return false;
+  return fields.some((field) => field?.toLowerCase().includes(needle));
 }
 
 export async function getProductBySlug(slug: string): Promise<ProductDetail | null> {
@@ -269,9 +283,7 @@ export async function searchProducts(query: string): Promise<ProductSummary[]> {
   // rather than a dedicated search service — revisit if the catalog grows significantly.
   const rows = (data ?? []) as unknown as (ProductRow & { description: string | null })[];
   const matches = rows.filter((row) =>
-    [row.name, row.categories?.name, row.description].some((field) =>
-      field?.toLowerCase().includes(needle),
-    ),
+    matchesSearchQuery([row.name, row.categories?.name, row.description], needle),
   );
 
   return matches.map((row) => toProductSummary(supabase, row));

@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start -p 3001",
     "lint": "eslint",
+    "test": "vitest run",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "db:seed": "node --env-file=.env.local scripts/seed.mts",
@@ -34,6 +35,7 @@
     "prettier": "^3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.11"
   }
 }

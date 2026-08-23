@@ -54,8 +54,8 @@ This plan implements the requirements in [README.md](README.md), based on the te
 - A **test-mode connected account** was created under it to receive the 10% split; its ID is `STRIPE_CONNECTED_ACCOUNT_ID` in `.env.local`/Vercel.
 - A webhook endpoint is configured on the platform account (scope: "Your account", not "Connected accounts"), listening for `checkout.session.completed` (+ optionally `checkout.session.async_payment_failed`, `checkout.session.expired`), pointed at the Vercel git-main branch URL + `/api/webhooks/stripe`. That route doesn't exist yet (Phase 7) — deliveries will fail/404 until then, which is expected.
 - A separate test-mode "Keygardens" Stripe account (`acct_1U6dbuANY9300s2U`) was also created (by you, under your own credentials), but it is **not** currently wired into `STRIPE_CONNECTED_ACCOUNT_ID` and isn't referenced anywhere in the codebase — it was created to explore the split before deciding on the real handoff plan below.
-- **Decided 2026-08-23**: the client will create their own Stripe account (their own business/tax/bank details) rather than us handing off an account created under Poyzner Technologies credentials — Stripe has no real "transfer ownership" feature; changing the legal entity/tax ID/payout bank on an existing account is a bigger operation than a simple handoff and creates tax-reporting mismatches in the meantime. Once the client's account exists, its account ID becomes `STRIPE_CONNECTED_ACCOUNT_ID` and it receives the 90% cut (adjust `CONNECTED_ACCOUNT_SPLIT` in [src/lib/checkout/actions.ts](src/lib/checkout/actions.ts) from `0.1` to `0.9`) — Poyzner Technologies stays the platform account (keys, webhook, `orders` writes) and implicitly keeps the remaining 10%. No swap of which account is "platform" is required.
-- **TODO**: once the client's own account exists and is wired in as above, delete the unused `acct_1U6dbuANY9300s2U` "Keygardens" test account (Stripe Dashboard > Account settings > delete account — safe in test mode, nothing in this repo references it) to avoid confusion later.
+- **Decided 2026-08-23**: the client will create their own Stripe account (their own business/tax/bank details) rather than us handing off an account created under Poyzner Technologies credentials — Stripe has no real "transfer ownership" feature; changing the legal entity/tax ID/payout bank on an existing account is a bigger operation than a simple handoff and creates tax-reporting mismatches in the meantime. Poyzner Technologies stays the platform account (keys, webhook, `orders` writes) — no swap of which account is "platform" is required, since `transfer_data` can send any percentage to the connected account regardless of size.
+- The actual ordered steps to switch to the 90% (client) / 10% (Poyzner Technologies) split, and to delete the leftover `acct_1U6dbuANY9300s2U` placeholder, are tracked under [Phase 14](#phase-14--launch-prep) (bundled with going live, since both involve switching Stripe to live mode).
 
 ## Phase 2 — Data Model & Schema
 - [x] Design tables: `categories`, `products`, `product_images`, `orders` (including a `status` field for pending/shipped/delivered), `order_items`, `profiles` (extends Supabase auth users, includes `is_admin` flag), `subscribers`, `coming_soon_items`, `wishlist_items`, `product_reviews` — see [supabase/migrations](supabase/migrations)
@@ -116,13 +116,35 @@ This plan implements the requirements in [README.md](README.md), based on the te
 - [x] Test entirely in Stripe test mode before go-live — verified end-to-end 2026-08-23: full test-mode purchase (test card `4242 4242 4242 4242`) against the deployed app, webhook (`checkout.session.completed`, scoped to **Your account**, not Connected accounts) delivered automatically, order + order_items written correctly, and the 10% Connect transfer (`transfer_data.amount`) confirmed on the connected account via the Stripe event log
 
 ## Phase 13 — Testing
-- [ ] Unit tests for utilities/business logic (e.g. cart totals, sort/filter logic)
-- [ ] End-to-end tests (Playwright) for: browse → add to cart → checkout (Stripe test mode) → order appears in profile
-- [ ] Manual test pass of admin CRUD and coming-soon editing
+- [x] Unit tests for utilities/business logic (e.g. cart totals, sort/filter logic) — [vitest.config.mts](vitest.config.mts), `npm test` ([package.json](package.json)); [src/lib/slugify.test.ts](src/lib/slugify.test.ts), [src/lib/catalog.test.ts](src/lib/catalog.test.ts) (category filter, popularity sort, search matching — extracted as pure `filterProductsByCategory`/`sortByPopularity`/`matchesSearchQuery` helpers in [src/lib/catalog.ts](src/lib/catalog.ts)), [src/lib/cart/cart-context.test.ts](src/lib/cart/cart-context.test.ts) (extracted `calculateTotalQuantity`/`calculateSubtotal` in [src/lib/cart/cart-context.tsx](src/lib/cart/cart-context.tsx))
+- [x] Manual test pass of admin CRUD and coming-soon editing — done 2026-08-23 via a throwaway confirmed admin account (created/granted/deleted via the existing scripts, no real credentials used) driven through the local dev server in a browser: category create/edit/delete, product create/edit/delete, orders/reviews list pages, and coming-soon slide reorder/caption-edit/deactivate-reactivate/add/delete all worked correctly; all test data was cleaned up afterward (no leftover rows/storage objects)
+- [x] Manual test pass of all transactional email links/flows end-to-end — no inbox access available, so this was a code-path review instead of live delivery: confirmed `signup`'s `emailRedirectTo` and `requestPasswordReset`'s `redirectTo` in [src/lib/auth/actions.ts](src/lib/auth/actions.ts) both point at `/auth/confirm?next=...`, which [src/app/auth/confirm/route.ts](src/app/auth/confirm/route.ts) verifies via `verifyOtp` and redirects to the intended page ([src/app/account/page.tsx](src/app/account/page.tsx) / [src/app/reset-password/page.tsx](src/app/reset-password/page.tsx)) — matches the Supabase email template fix already recorded in Phase 3. Subscription/order-receipt/order-status emails ([src/lib/email.ts](src/lib/email.ts)) contain no links, so there's nothing to misroute. **Still requires you**: an actual live send-and-click test from a real inbox, since delivery itself can't be verified without one.
+
 
 ## Phase 14 — Launch Prep
-- [ ] Switch Stripe to live mode once Connect account is verified
 - [ ] Final content review against the live site (Phase 0 inventory)
-- [ ] Add keygardens.ca as a custom domain on the Vercel project, configure apex + `www` redirect, and confirm SSL is issued
-- [ ] Send you the exact DNS records to add at your registrar so keygardens.ca points at the Vercel deployment
-- [ ] Post-launch smoke test on the real domain once DNS has propagated
+
+### Domain cutover (keygardens.ca)
+- [ ] Add keygardens.ca as a custom domain on the Vercel project, configure apex + `www` redirect
+- [ ] Gather the Resend sending-domain verification DNS records too (blocked item from Phase 1) so the client only has to make one trip to their registrar
+- [ ] Send the client the combined DNS record list (Vercel domain + Resend verification) to add at their registrar — **requires the client**: this is the one step only they can do
+- [ ] Wait for DNS propagation and confirm SSL is issued on the Vercel domain
+- [ ] Once Resend's domain verification completes: update `RESEND_FROM_EMAIL` (Vercel env var) **and** the sender address in Supabase Auth's SMTP settings to the branded address — both need updating since the same Supabase project is shared by local dev and production (see Phase 1 note)
+- [ ] Update `NEXT_PUBLIC_SITE_URL` in Vercel's production env vars to `https://keygardens.ca` — this feeds auth email redirect links ([src/lib/auth/actions.ts](src/lib/auth/actions.ts)) and Stripe Checkout success/cancel URLs ([src/lib/checkout/actions.ts](src/lib/checkout/actions.ts))
+- [ ] Add `https://keygardens.ca` (and the `www` variant if used) to Supabase Auth > URL Configuration > Site URL + Redirect URLs allow list — Supabase rejects auth confirm/reset redirects to any URL not on this list
+
+### Stripe: 90/10 split + live mode
+- [ ] Client creates their own Stripe account (in progress as of 2026-08-23)
+- [ ] You invite that account as a **Standard** connected account (Stripe Dashboard > Connect > Accounts > + Create > Standard, invite by the client's email) — the client links their existing account during this flow, which is what actually makes it usable as a `transfer_data.destination`
+- [ ] Set `STRIPE_CONNECTED_ACCOUNT_ID` (test mode first, `.env.local` + Vercel) to the resulting connected account's `acct_...` ID
+- [ ] Code change: bump `CONNECTED_ACCOUNT_SPLIT` from `0.1` to `0.9` in [src/lib/checkout/actions.ts](src/lib/checkout/actions.ts) (update the comment above it too)
+- [ ] Re-verify end-to-end in test mode (same method as the 2026-08-23 Phase 12 test) — confirm 90% transfers to the client's connected account and 10% stays with the Poyzner Technologies platform account
+- [ ] Switch both the platform account and the client's connected account to live mode: live `STRIPE_SECRET_KEY`/`STRIPE_CONNECTED_ACCOUNT_ID`/`STRIPE_WEBHOOK_SECRET`/publishable key in Vercel, and a newly-configured live-mode webhook endpoint (test/live webhooks are separate) pointed at `https://keygardens.ca/api/webhooks/stripe` once the domain cutover above is done
+- [ ] Delete the unused `acct_1U6dbuANY9300s2U` "Keygardens" placeholder test account once the real connected account is confirmed working
+
+### Final checks
+- [ ] Post-launch smoke test on the real domain: browse/search, signup + password-reset email links, a full live (or test-mode, if going live gradually) checkout purchase, contact form, subscribe form, admin login
+- [ ] Live-inbox check for every transactional email link/flow (the part Phase 13 couldn't verify without inbox access): click the real signup-confirmation and password-reset links end-to-end, and confirm the subscription-confirmation and order-receipt/status emails actually arrive
+
+## Phase 15 — Nice to Have
+- [ ] End-to-end tests (Playwright) for: browse → add to cart → checkout (Stripe test mode) → order appears in profile
