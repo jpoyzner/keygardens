@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/lib/auth/actions";
 import { CartIndicator } from "@/components/cart-indicator";
 import { SearchBar } from "@/components/search-bar";
+import { MobileNav } from "@/components/mobile-nav";
 
 export async function SiteHeader() {
   const supabase = await createClient();
@@ -81,23 +82,11 @@ export async function SiteHeader() {
           <SearchBar />
         </nav>
 
-        {/* Mobile menu toggle (CSS-only, no client JS needed) */}
-        <input type="checkbox" id="nav-toggle" className="peer hidden" />
-        <label
-          htmlFor="nav-toggle"
-          className="flex cursor-pointer flex-col gap-1.5 p-2 sm:hidden"
-          aria-label="Toggle menu"
-        >
-          <span className="h-0.5 w-6 bg-white" />
-          <span className="h-0.5 w-6 bg-white" />
-          <span className="h-0.5 w-6 bg-white" />
-        </label>
-
-        {/* Mobile nav panel */}
-        <nav className="absolute inset-x-0 top-full hidden flex-col gap-4 border-b border-white bg-[#1d1d1b] px-4 py-4 text-sm peer-checked:flex sm:hidden">
+        {/* Mobile menu toggle + panel */}
+        <MobileNav>
           <SearchBar inputClassName="w-full rounded border border-zinc-300 px-2 py-1.5 pr-6 text-sm" />
           {navLinks}
-        </nav>
+        </MobileNav>
       </div>
     </header>
   );

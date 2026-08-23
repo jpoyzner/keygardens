@@ -14,10 +14,16 @@
 
 body {
   background: var(--background) url("/background.jpeg") no-repeat fixed;
-  background-position: center calc(50% + 4in);
+  background-position: center center;
   background-size: 100% auto;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@media (min-width: 640px) {
+  body {
+    background-position: center calc(50% + 4in);
+  }
 }
 
 :focus-visible {
