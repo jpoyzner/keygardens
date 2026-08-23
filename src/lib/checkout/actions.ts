@@ -79,7 +79,8 @@ export async function createCheckoutSession(cartItems: CartItem[]): Promise<Chec
     });
   } catch (err) {
     console.error("Failed to create Stripe Checkout session:", err);
-    return { error: "Could not start checkout. Please try again." };
+    // TEMP debugging aid — revert to a generic message once the live deploy is verified working.
+    return { error: err instanceof Error ? err.message : "Could not start checkout." };
   }
 
   if (!session.url) {
