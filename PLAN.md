@@ -85,7 +85,7 @@ This plan implements the requirements in [README.md](README.md), based on the te
 
 ## Phase 7 — Cart
 - [x] Cart state (persisted per session/user), add/remove/update quantity — cart state itself was already built in Phase 5 ([src/lib/cart/cart-context.tsx](src/lib/cart/cart-context.tsx), localStorage-backed); this phase added the missing [src/app/cart/page.tsx](src/app/cart/page.tsx) view (line items, quantity edit, remove, subtotal) and pointed [src/components/cart-indicator.tsx](src/components/cart-indicator.tsx) at it
-  - Note: all Stripe/payment work (checkout session creation, Connect destination charge, order writing) has been deferred to [Phase 12](#phase-12--checkout--payments-stripe), so this phase only covers the cart itself — the cart page has a disabled "Checkout (coming soon)" button as a placeholder.
+  - Note: all Stripe/payment work (checkout session creation, Connect destination charge, order writing) was deferred to [Phase 12](#phase-12--checkout--payments-stripe), so this phase only covered the cart itself — the cart page had a disabled "Checkout (coming soon)" button as a placeholder until Phase 12 replaced it with a real checkout flow.
 
 ## Phase 8 — Profile & Orders
 - [x] Profile page (view/edit account details) — [src/app/account/page.tsx](src/app/account/page.tsx) now edits `profiles.full_name` via [src/components/profile-form.tsx](src/components/profile-form.tsx) + [src/lib/account/actions.ts](src/lib/account/actions.ts)
@@ -108,10 +108,10 @@ This plan implements the requirements in [README.md](README.md), based on the te
 - [x] Admin screen to add/edit/reorder/remove slides — [src/app/admin/coming-soon/page.tsx](src/app/admin/coming-soon/page.tsx), [src/lib/admin/coming-soon.ts](src/lib/admin/coming-soon.ts), [src/lib/admin/coming-soon-actions.ts](src/lib/admin/coming-soon-actions.ts)
 
 ## Phase 12 — Checkout & Payments (Stripe)
-- [ ] Stripe Checkout session creation (server-side API route)
-- [ ] Stripe Connect destination charge: automatically routes 10% of profit to your connected account on every successful payment
-- [ ] Order + order_items written to DB on successful webhook confirmation
-- [ ] Test entirely in Stripe test mode before go-live
+- [x] Stripe Checkout session creation (server action, not a route — Stripe's redirect-based Checkout doesn't need a dedicated API route) — [src/lib/checkout/actions.ts](src/lib/checkout/actions.ts), wired to [src/components/checkout-button.tsx](src/components/checkout-button.tsx) on [src/app/cart/page.tsx](src/app/cart/page.tsx)
+- [x] Stripe Connect destination charge: automatically routes 10% of profit to your connected account on every successful payment — `payment_intent_data.transfer_data` in [src/lib/checkout/actions.ts](src/lib/checkout/actions.ts), using `STRIPE_CONNECTED_ACCOUNT_ID`
+- [x] Order + order_items written to DB on successful webhook confirmation — [src/app/api/webhooks/stripe/route.ts](src/app/api/webhooks/stripe/route.ts) (service-role client, idempotent on `stripe_checkout_session_id`), plus a receipt email via `sendOrderReceiptEmail` in [src/lib/email.ts](src/lib/email.ts) and a confirmation page at [src/app/checkout/success/page.tsx](src/app/checkout/success/page.tsx)
+- [ ] Test entirely in Stripe test mode before go-live — `STRIPE_WEBHOOK_SECRET` is already set in `.env.local` (matching the Phase 1 dashboard-configured endpoint, which points at the deployed Vercel URL, not localhost) — **requires you**: either test against that deployed URL directly, or run `stripe listen --forward-to localhost:3001/api/webhooks/stripe` locally (use the CLI's own printed `whsec_...` secret in `.env.local` while doing so, since it differs from the dashboard endpoint's secret), then complete a full test-mode purchase (use Stripe's [test card numbers](https://docs.stripe.com/testing)) and confirm the order appears in `/account/orders` and `/admin/orders`
 
 ## Phase 13 — Testing
 - [ ] Unit tests for utilities/business logic (e.g. cart totals, sort/filter logic)

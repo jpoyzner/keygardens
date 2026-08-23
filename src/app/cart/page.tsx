@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/lib/cart/cart-context";
+import { CheckoutButton } from "@/components/checkout-button";
 
 function formatPrice(amount: number, currency: string) {
   return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(amount);
@@ -13,7 +14,7 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-4 rounded-lg border border-white bg-black my-8 px-4 py-8">
+      <div className="mx-auto my-8 flex w-full max-w-2xl flex-1 flex-col gap-4 rounded-lg border border-white bg-black px-4 py-8">
         <h1 className="text-2xl font-semibold">Your cart</h1>
         <p className="text-zinc-200">Your cart is empty.</p>
         <Link href="/products" className="self-start underline">
@@ -27,7 +28,7 @@ export default function CartPage() {
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 rounded-lg border border-white bg-black my-8 px-4 py-8">
+    <div className="mx-auto my-8 flex w-full max-w-2xl flex-1 flex-col gap-6 rounded-lg border border-white bg-black px-4 py-8">
       <h1 className="text-2xl font-semibold">Your cart</h1>
 
       <ul className="flex flex-col gap-4">
@@ -92,14 +93,7 @@ export default function CartPage() {
         <span className="font-semibold">{formatPrice(subtotal, currency)}</span>
       </div>
 
-      <button
-        type="button"
-        disabled
-        title="Checkout is coming soon"
-        className="self-end rounded bg-white px-5 py-2.5 text-sm font-medium text-zinc-900 opacity-50"
-      >
-        Checkout (coming soon)
-      </button>
+      <CheckoutButton />
     </div>
   );
 }

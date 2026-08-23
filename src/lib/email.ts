@@ -46,6 +46,27 @@ export async function sendSubscriptionConfirmation(email: string) {
   });
 }
 
+export async function sendOrderReceiptEmail(order: {
+  id: string;
+  contactEmail: string;
+  total: number;
+  currency: string;
+}) {
+  const formattedTotal = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: order.currency,
+  }).format(order.total);
+  await sendEmail({
+    to: order.contactEmail,
+    subject: "Your Keygardens order receipt",
+    html: `
+      <p>Thanks for your order! We've received your payment and are getting it ready.</p>
+      <p><strong>Order:</strong> #${order.id.slice(0, 8)}</p>
+      <p><strong>Total:</strong> ${formattedTotal}</p>
+    `,
+  });
+}
+
 export async function sendOrderStatusEmail(order: {
   id: string;
   contactEmail: string;
