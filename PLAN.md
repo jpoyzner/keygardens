@@ -122,29 +122,75 @@ This plan implements the requirements in [README.md](README.md), based on the te
 
 
 ## Phase 14 — Launch Prep
-- [ ] Final content review against the live site (Phase 0 inventory)
+
+Phase 14 is complete (test-mode Connect onboarding, domain cutover DNS/SSL, Resend/SMTP branding all done). **Remaining launch work is tracked in [Phase 15 — Go Live](#phase-15--go-live) — resume there.**
+
+Stripe Connect onboarding summary: created `acct_1U9IJvAB8Q2Iyv5n` for the client (`keygardens2016@gmail.com`) via [scripts/create-connect-account.mts](scripts/create-connect-account.mts); client completed onboarding 2026-08-28 (`card_payments`/`stripe_transfers`/`payouts` all `active`, `requirements.entries` empty); `STRIPE_CONNECTED_ACCOUNT_ID` set in `.env.local` + Vercel; re-verified with a real test-mode purchase (90/10 split confirmed via `transfer_data`). (An earlier account, `acct_1U8X9BAB8QtmSWKW` created 2026-08-25, was abandoned per the user — not usable for this platform's setup.)
+
+Context for why this was a multi-step dance instead of a single "invite" click: the client already had their own independent Stripe account (`acct_1U8Bc71uc3G02Ih6`), but it turned out **that account can't be linked to this platform at all** without OAuth (v1 API) support, which wasn't available on this platform at first (Stripe support later enabled it 2026-08-28, but the user decided not to switch to that route — see the "Stripe: 90/10 split" section below). The workaround is having the client onboard fresh into a brand-new account created via [scripts/create-connect-account.mts](scripts/create-connect-account.mts). They'll end up with two Stripe accounts (their original one stays unused for this purpose) and an **Express Dashboard** login (not full independent Dashboard access) for the new one — already confirmed acceptable.
+
+- [x] Final content review against the live site (Phase 0 inventory) — re-crawled keygardens.ca 2026-08-25 (homepage, `/ols/categories/hoodie`, `/ols/categories/t-shurt`, `/ols/products/hoodies`, `/ols/products/hats`, `/ols/products/key-garden`): still exactly 3 products (Hoodies $35, Hats $20, key garden $20), same 3 category pages, same 4 coming-soon carousel images, still no product descriptions anywhere — [content-inventory/inventory.json](content-inventory/inventory.json)/[NOTES.md](content-inventory/NOTES.md) remain accurate, no re-scrape needed
 
 ### Domain cutover (keygardens.ca)
-- [ ] Add keygardens.ca as a custom domain on the Vercel project, configure apex + `www` redirect
-- [ ] Gather the Resend sending-domain verification DNS records too (blocked item from Phase 1) so the client only has to make one trip to their registrar
-- [ ] Send the client the combined DNS record list (Vercel domain + Resend verification) to add at their registrar — **requires the client**: this is the one step only they can do
-- [ ] Wait for DNS propagation and confirm SSL is issued on the Vercel domain
-- [ ] Once Resend's domain verification completes: update `RESEND_FROM_EMAIL` (Vercel env var) **and** the sender address in Supabase Auth's SMTP settings to the branded address — both need updating since the same Supabase project is shared by local dev and production (see Phase 1 note)
-- [ ] Update `NEXT_PUBLIC_SITE_URL` in Vercel's production env vars to `https://keygardens.ca` — this feeds auth email redirect links ([src/lib/auth/actions.ts](src/lib/auth/actions.ts)) and Stripe Checkout success/cancel URLs ([src/lib/checkout/actions.ts](src/lib/checkout/actions.ts))
-- [ ] Add `https://keygardens.ca` (and the `www` variant if used) to Supabase Auth > URL Configuration > Site URL + Redirect URLs allow list — Supabase rejects auth confirm/reset redirects to any URL not on this list
+- [x] Add keygardens.ca as a custom domain on the Vercel project, configure apex + `www` redirect — done 2026-08-27 (user added it via the Vercel dashboard's "Add Existing" flow, since "Add Custom Domain" was actually a buy-a-new-domain search and correctly reported it "unavailable" — it's already registered by the client at GoDaddy). `www.keygardens.ca` redirects to the apex with a 308.
+- [x] Gather the Resend sending-domain verification DNS records too (blocked item from Phase 1) so the client only has to make one trip to their registrar — done 2026-08-27: `keygardens.ca` was already registered in Resend (added 2026-08-20, status `not_started`, DNS records never added).
+- [x] Combined DNS record list ready to send to the client (GoDaddy is their registrar):
+  - `A` `@` → `216.198.79.1`
+  - `CNAME` `www` → `a7caa2b1e07ab06a.vercel-dns-017.com.`
+  - `TXT` `resend._domainkey` → `p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC1Uh+CwnmUltGfpk26chpifehZ5ezOeOsVxL08kUEChjpWkmmtuvX4+s9KFz+vEjhsWz7BAed+tDfuIouVfeUDXo0b4gjBz9FFWbUtZ6ZgsHXG776TnC6YNnlVaNySmpxebv2VdQcg+JbGFWCid64pnT9F4eXyMqpztZU4GS3sPQIDAQAB`
+  - `MX` `send` → `feedback-smtp.us-east-1.amazonses.com` (priority 10)
+  - `TXT` `send` → `v=spf1 include:amazonses.com ~all`
+- [x] Send the client the combined DNS record list above to add at GoDaddy — **requires the client**: this is the one step only they can do (heads-up: don't remove any existing MX record for their real inbox email, the new one is scoped to the `send` subdomain). Done 2026-08-28: client confirmed he added all 5 records (`A` `@`, `CNAME` `www`, `TXT` `resend._domainkey`, `MX` `send`, `TXT` `send`). He also confirmed the only pre-existing records at GoDaddy were 2 `NS` + 1 `SOA` (both name `@`, standard registrar defaults) and a `CNAME` `_domainconnect` (GoDaddy's own Domain Connect service record) — he left those untouched, and confirms there were **no pre-existing `MX` records** (no prior email hosting on this domain to conflict with).
+
+#### Exact steps for the client (GoDaddy)
+1. Log in to [godaddy.com](https://godaddy.com) and go to **My Products**.
+2. Find `keygardens.ca` and click **DNS** (or **Manage DNS**) next to it.
+3. On the DNS Management page, edit/add these records (GoDaddy usually already has a default `A` record for `@` and a `CNAME` for `www` pointing at a GoDaddy parking page — edit those existing rows instead of adding duplicates):
+   - **A** record, Name `@`, Value `216.198.79.1` (edit the existing one if present)
+   - **CNAME** record, Name `www`, Value `a7caa2b1e07ab06a.vercel-dns-017.com` (edit the existing one if present; GoDaddy adds the trailing dot automatically, don't type it)
+   - **TXT** record (new), Name `resend._domainkey`, Value `p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC1Uh+CwnmUltGfpk26chpifehZ5ezOeOsVxL08kUEChjpWkmmtuvX4+s9KFz+vEjhsWz7BAed+tDfuIouVfeUDXo0b4gjBz9FFWbUtZ6ZgsHXG776TnC6YNnlVaNySmpxebv2VdQcg+JbGFWCid64pnT9F4eXyMqpztZU4GS3sPQIDAQAB`
+   - **MX** record (new), Name `send`, Value `feedback-smtp.us-east-1.amazonses.com`, Priority `10`
+   - **TXT** record (new), Name `send`, Value `v=spf1 include:amazonses.com ~all`
+4. **Important**: don't touch or delete any existing `MX` record on `@` (the root domain) — that's what routes your regular inbox email (e.g. Google Workspace, GoDaddy email). The new `MX` record above is scoped only to the `send` subdomain and won't conflict with it.
+5. Leave TTL at the default (usually 1 hour) unless GoDaddy requires a specific value.
+6. Save changes. DNS propagation can take anywhere from a few minutes to a few hours (rarely up to 48h) — no further action needed after saving, we'll monitor and confirm from our side once it resolves.
+- [x] Wait for DNS propagation and confirm SSL is issued on the Vercel domain — checked 2026-08-28: all 5 records already resolve correctly via public DNS (`dig @8.8.8.8`) — `A`/`CNAME www`/`TXT resend._domainkey`/`MX send`/`TXT send` all match what we asked for exactly. `https://keygardens.ca` initially failed the TLS handshake (`SSL_ERROR_SYSCALL`, cert not issued yet) and Resend's domain check was `not_started`/`pending`. **Confirmed done later 2026-08-28**: `curl https://keygardens.ca` now returns a real `308` redirect to `https://www.keygardens.ca/` (valid TLS handshake, Vercel cert issued), and `https://www.keygardens.ca/` returns `200`. Resend's domain status is also `verified` (DKIM/SPF/MX all `status: "verified"`).
+- [x] Once Resend's domain verification completes: update `RESEND_FROM_EMAIL` (Vercel env var) **and** the sender address in Supabase Auth's SMTP settings to the branded address — both need updating since the same Supabase project is shared by local dev and production (see Phase 1 note). Done 2026-08-28 by the user (Vercel env var updated + redeployed, Supabase Auth SMTP sender updated).
+
+Remaining domain-cutover items (`NEXT_PUBLIC_SITE_URL`, Supabase Auth redirect allow-list) are now unblocked (SSL is live) — moved to [Phase 15 — Go Live](#phase-15--go-live) along with the Stripe live-mode switch and final checks, so there's a single place to resume launch work.
 
 ### Stripe: 90/10 split + live mode
-- [ ] Client creates their own Stripe account (in progress as of 2026-08-23)
-- [ ] You invite that account as a **Standard** connected account (Stripe Dashboard > Connect > Accounts > + Create > Standard, invite by the client's email) — the client links their existing account during this flow, which is what actually makes it usable as a `transfer_data.destination`
-- [ ] Set `STRIPE_CONNECTED_ACCOUNT_ID` (test mode first, `.env.local` + Vercel) to the resulting connected account's `acct_...` ID
-- [ ] Code change: bump `CONNECTED_ACCOUNT_SPLIT` from `0.1` to `0.9` in [src/lib/checkout/actions.ts](src/lib/checkout/actions.ts) (update the comment above it too)
-- [ ] Re-verify end-to-end in test mode (same method as the 2026-08-23 Phase 12 test) — confirm 90% transfers to the client's connected account and 10% stays with the Poyzner Technologies platform account
-- [ ] Switch both the platform account and the client's connected account to live mode: live `STRIPE_SECRET_KEY`/`STRIPE_CONNECTED_ACCOUNT_ID`/`STRIPE_WEBHOOK_SECRET`/publishable key in Vercel, and a newly-configured live-mode webhook endpoint (test/live webhooks are separate) pointed at `https://keygardens.ca/api/webhooks/stripe` once the domain cutover above is done
-- [ ] Delete the unused `acct_1U6dbuANY9300s2U` "Keygardens" placeholder test account once the real connected account is confirmed working
+- [x] Client creates their own Stripe account (`acct_1U8Bc71uc3G02Ih6`, provided 2026-08-24) — **superseded 2026-08-25**: this account can't be linked to the platform (see below), so a new connected account is created instead
+- [x] ~~Invite that account as a Standard connected account~~ — **not possible**: this platform uses the Accounts v2 API, which doesn't support OAuth/Standard-account linking of a pre-existing independent Stripe account (confirmed via Stripe's docs + support assistant 2026-08-25). Also confirmed the platform's Connect setup is locked to `dashboard: "express"` only (`dashboard: "full"` is rejected by the API) — full independent Dashboard access isn't available on this platform at all, even for brand-new accounts.
+- [x] **New approach**: [scripts/create-connect-account.mts](scripts/create-connect-account.mts) (`npm run connect:create-account -- client@example.com`) creates a brand-new v2 Account (`dashboard: "express"`, `merchant.capabilities.card_payments` + `recipient.capabilities.stripe_balance.stripe_transfers` requested, `fees_collector`/`losses_collector: "application"`) and prints a Stripe-hosted onboarding link for the client to complete. Verified working end-to-end in test mode 2026-08-25 (created `acct_1U8ESTAB8QbyEMgy` as a dry run + got a valid onboarding link). First real client account (`acct_1U8X9BAB8QtmSWKW`, created 2026-08-25) was later abandoned per the user (2026-08-28); the real account is `acct_1U9IJvAB8Q2Iyv5n`, and as of 2026-08-28 the client has **fully completed onboarding** — `card_payments`/`stripe_transfers`/`payouts` all `active`, `requirements.entries` empty.
+- [x] Set `STRIPE_CONNECTED_ACCOUNT_ID` (test mode, `.env.local` + Vercel) to `acct_1U9IJvAB8Q2Iyv5n` — done by the user 2026-08-27/28.
+- [x] Code change: bump `CONNECTED_ACCOUNT_SPLIT` from `0.1` to `0.9` in [src/lib/checkout/actions.ts](src/lib/checkout/actions.ts) (update the comment above it too)
+- [x] Re-verify end-to-end in test mode (same method as the 2026-08-23 Phase 12 test) — confirm 90% transfers to the client's connected account and 10% stays with the Poyzner Technologies platform account — done 2026-08-28: `transfer_data: { amount: 1800, destination: "acct_1U9IJvAB8Q2Iyv5n" }` on a $20 test purchase, no `application_fee_amount` (platform implicitly keeps the remaining 10%)
+
+Remaining items (live-mode switch, deleting the placeholder account) moved to [Phase 15 — Go Live](#phase-15--go-live).
+
+### Final checks
+
+Moved to [Phase 15 — Go Live](#phase-15--go-live) (they need the live domain/live Stripe mode to actually run).
+
+## Phase 15 — Go Live
+
+Everything left to actually launch keygardens.ca for real. Resume here.
+
+### Finish the domain cutover
+- [ ] Update `NEXT_PUBLIC_SITE_URL` in Vercel's production env vars to `https://keygardens.ca` — this feeds auth email redirect links ([src/lib/auth/actions.ts](src/lib/auth/actions.ts)) and Stripe Checkout success/cancel URLs ([src/lib/checkout/actions.ts](src/lib/checkout/actions.ts)). Unblocked as of 2026-08-28 (SSL is live on both apex and `www`) — needs Vercel dashboard access, no API token available in this sandbox.
+- [ ] Add `https://keygardens.ca` (and the `www` variant if used) to Supabase Auth > URL Configuration > Site URL + Redirect URLs allow list — Supabase rejects auth confirm/reset redirects to any URL not on this list. Needs Supabase dashboard access.
+
+### Stripe live-mode switch
+- [ ] Get live-mode API keys from Stripe (`STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`) — requires the platform account's live-mode activation to be complete (business details, etc., if not already done)
+- [ ] The client's connected account (`acct_1U9IJvAB8Q2Iyv5n`) is test-mode only — Stripe's sandbox model keeps test/live accounts separate, so a **live-mode connected account** needs to be created for the client (re-run [scripts/create-connect-account.mts](scripts/create-connect-account.mts) with a live secret key) and the client will need to onboard again (business/identity/bank info) for the live account
+- [ ] Configure a new **live-mode** webhook endpoint (test/live webhooks are separate in Stripe) pointed at `https://keygardens.ca/api/webhooks/stripe` — do this after the domain cutover above so it's pointed at the real domain, not a Vercel preview URL
+- [ ] Set `STRIPE_SECRET_KEY`, `STRIPE_CONNECTED_ACCOUNT_ID` (the new live account), `STRIPE_WEBHOOK_SECRET`, and `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` (all live-mode values) in Vercel's production env vars
+- [ ] Delete the unused `acct_1U6dbuANY9300s2U` "Keygardens" placeholder test account — **requires the user**: this account belongs to a different Stripe account/login than the one the platform's API key can access (confirmed 2026-08-28, `stripe.accounts.retrieve`/`stripe.v2.core.accounts.retrieve` both returned "Permission denied... does not have permission to access account") — needs to be deleted from within that account's own dashboard
 
 ### Final checks
 - [ ] Post-launch smoke test on the real domain: browse/search, signup + password-reset email links, a full live (or test-mode, if going live gradually) checkout purchase, contact form, subscribe form, admin login
 - [ ] Live-inbox check for every transactional email link/flow (the part Phase 13 couldn't verify without inbox access): click the real signup-confirmation and password-reset links end-to-end, and confirm the subscription-confirmation and order-receipt/status emails actually arrive
 
-## Phase 15 — Nice to Have
+## Phase 16 — Nice to Have
 - [ ] End-to-end tests (Playwright) for: browse → add to cart → checkout (Stripe test mode) → order appears in profile

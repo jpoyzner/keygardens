@@ -6,8 +6,8 @@ import { stripe } from "@/lib/stripe";
 import type { CartItem } from "@/lib/cart/cart-context";
 import type Stripe from "stripe";
 
-// Portion of every sale automatically transferred to the connected payout account (see PLAN.md Phase 12).
-const CONNECTED_ACCOUNT_SPLIT = 0.1;
+// Portion of every sale automatically transferred to the connected payout account (see PLAN.md Phase 14 — client's account gets 90%).
+const CONNECTED_ACCOUNT_SPLIT = 0.9;
 
 export interface CheckoutActionState {
   error?: string;

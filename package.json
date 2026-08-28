@@ -13,7 +13,8 @@
     "db:seed": "node --env-file=.env.local scripts/seed.mts",
     "make-admin": "node --env-file=.env.local scripts/set-admin.mts",
     "confirm-user": "node --env-file=.env.local scripts/confirm-user.mts",
-    "create-confirmed-user": "node --env-file=.env.local scripts/create-confirmed-user.mts"
+    "create-confirmed-user": "node --env-file=.env.local scripts/create-confirmed-user.mts",
+    "connect:create-account": "node --env-file=.env.local scripts/create-connect-account.mts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",
