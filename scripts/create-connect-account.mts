@@ -29,9 +29,10 @@ async function main() {
   const account = await stripe.v2.core.accounts.create({
     contact_email: clientEmail,
     dashboard: "express",
-    identity: { country: "CA" },
+    // Client's real address is in the US (corrected 2026-08-28 — an earlier CA-locked live account had to be abandoned).
+    identity: { country: "US" },
     defaults: {
-      currency: "cad",
+      currency: "usd",
       // Destination charges without on_behalf_of: platform stays merchant of record.
       responsibilities: { fees_collector: "application", losses_collector: "application" },
     },
