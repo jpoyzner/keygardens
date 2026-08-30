@@ -6,7 +6,8 @@ import { Resend } from "resend";
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL ?? "onboarding@resend.dev";
-const CONTACT_INBOX_EMAIL = process.env.CONTACT_INBOX_EMAIL;
+// Inbox that receives contact form + new-subscriber admin notifications.
+const ADMIN_INBOX_EMAIL = process.env.ADMIN_INBOX_EMAIL;
 
 async function sendEmail(options: { to: string; subject: string; html: string }) {
   if (!resend) {
@@ -24,12 +25,12 @@ export async function sendContactNotification(submission: {
   email: string;
   message: string;
 }) {
-  if (!CONTACT_INBOX_EMAIL) {
-    console.warn("CONTACT_INBOX_EMAIL not set — skipping contact form notification email");
+  if (!ADMIN_INBOX_EMAIL) {
+    console.warn("ADMIN_INBOX_EMAIL not set — skipping contact form notification email");
     return;
   }
   await sendEmail({
-    to: CONTACT_INBOX_EMAIL,
+    to: ADMIN_INBOX_EMAIL,
     subject: `New contact form message from ${submission.name}`,
     html: `
       <p><strong>From:</strong> ${submission.name} (${submission.email})</p>
@@ -43,6 +44,18 @@ export async function sendSubscriptionConfirmation(email: string) {
     to: email,
     subject: "You're subscribed to Keygardens",
     html: `<p>Thanks for subscribing! We'll email you when new products and updates go live.</p>`,
+  });
+}
+
+export async function sendNewSubscriberNotification(email: string) {
+  if (!ADMIN_INBOX_EMAIL) {
+    console.warn("ADMIN_INBOX_EMAIL not set — skipping new subscriber notification email");
+    return;
+  }
+  await sendEmail({
+    to: ADMIN_INBOX_EMAIL,
+    subject: "New subscriber on Keygardens",
+    html: `<p>${email} just subscribed to updates.</p>`,
   });
 }
 

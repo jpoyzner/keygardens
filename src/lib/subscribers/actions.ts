@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { sendSubscriptionConfirmation } from "@/lib/email";
+import { sendSubscriptionConfirmation, sendNewSubscriberNotification } from "@/lib/email";
 
 export interface SubscribeActionState {
   error?: string;
@@ -27,6 +27,7 @@ export async function subscribe(
   }
 
   await sendSubscriptionConfirmation(email);
+  await sendNewSubscriberNotification(email);
 
   return { message: "You're subscribed! Watch your inbox for updates." };
 }
