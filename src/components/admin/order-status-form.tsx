@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { updateOrderStatus, type OrderActionState } from "@/lib/admin/orders-actions";
 import type { OrderStatus } from "@/lib/orders";
 
@@ -12,11 +12,24 @@ export function OrderStatusForm({ orderId, status }: { orderId: string; status: 
     undefined,
   );
 
+  // Controlled select: an uncontrolled one (defaultValue) gets reset back to its
+  // last-rendered default by React right after the action settles, which lands
+  // before the revalidated `status` prop arrives — it briefly looks like the
+  // update reverted (see https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+  // for why we sync from the prop during render instead of via an effect).
+  const [selected, setSelected] = useState(status);
+  const [prevStatus, setPrevStatus] = useState(status);
+  if (status !== prevStatus) {
+    setPrevStatus(status);
+    setSelected(status);
+  }
+
   return (
     <form action={formAction} className="flex items-center gap-2">
       <select
         name="status"
-        defaultValue={status}
+        value={selected}
+        onChange={(e) => setSelected(e.target.value as OrderStatus)}
         className="rounded border border-zinc-300 px-2 py-1 text-sm capitalize"
       >
         {STATUSES.map((option) => (
